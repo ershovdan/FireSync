@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact name="FireSync_jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FireSync_jar</output-path>
+    <root id="root">
+      <element id="dir-copy" path="$PROJECT_DIR$/src/web-server" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/db" />
+    </root>
+  </artifact>
+</component>

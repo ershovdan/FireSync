@@ -1,0 +1,36 @@
+{% load static %}
+<menu class="menu" style="position: fixed; height: 60px; width: calc(100vw / 3 * 2); display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;">
+
+    <a href="/"><div class="menu_home" id="menu_home" style="grid-column-start: 1; grid-column-end: 1;"><p>HOME</p></div></a>
+    <a href="/"><div class="menu_" id="menu_" style="grid-column-start: 1; grid-column-end: 1;"><p>HOME</p></div></a>
+    <a href="/"><div class="menu_" id="menu_" style="grid-column-start: 1; grid-column-end: 1;"><p>HOME</p></div></a>
+    <a href="/add"><div class="menu_add" id="menu_add" style="grid-column-start: 4; grid-column-end: 4;"><p>ADD</p></div></a>
+</menu>
+
+<script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script>
+
+</script>
+<style>
+    .menu a {
+        text-decoration: none;
+        color: white;
+        text-align: center;
+        font-family: Roboto, sans-serif;
+        font-weight: bold;
+        line-height: 50px;
+    }
+
+    .menu a div:hover {
+        background-color: #e33b37;
+        transition: .5s;
+    }
+
+    .menu a div {
+        height: 50px;
+        background-color: #FE413C;
+    }
+</style>
+
+

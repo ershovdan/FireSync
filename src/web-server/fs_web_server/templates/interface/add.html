@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body >
+{% include "blocks/menu.html" %}
+<main>
+    <section class="sec1">
+        <form name="name" method="post" class="add_form" style="margin-top: 200px">
+            {% csrf_token %}
+            <p>NAME FOR YOUR SHARE</p>
+            <input type="text" name="name" id="dir_picker" style="font-size: 1.2em; padding: 10px; border-radius: 5px;">
+            <p>YOUR DIRECTORY PATH</p>
+            <input type="text" name="path" class="path" style="font-size: 1.2em; padding: 10px; border-radius: 5px;">
+            <input type="submit" value="OK">
+        </form>
+    </section>
+    <section class="sec2">{% include "blocks/right_menu.html" %}</section>
+</main>
+</body>
+</html>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #212529;
+        overflow: hidden;
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .sec1 {
+        grid-column-start: 1; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .sec2 {
+        grid-column-start: 3; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .add_form {
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        margin-left: 20%;
+    }
+
+    .add_form p {
+        font-family: Roboto, sans-serif;
+        color: white;
+        font-size: 1.2em;
+        margin-bottom: 5px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    .add_form input {
+        border: none;
+        outline: none;
+    }
+
+    .add_form input:focus {
+        border: none;
+        outline: none;
+    }
+
+    .path::file-selector-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
+<script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script>
+    anime({
+        targets: '.menu_add',
+        height: '60px',
+        lineHeight: '60px',
+        backgroundColor: '#e33b37',
+        boxShadow: "inset 0px 0px 10px -3px rgba(0,0,0,0.1)",
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+    })
+
+    function timer() {
+
+
+        setTimeout(timer, 50)
+    }
+
+    setTimeout(timer, 50)
+</script>
+
