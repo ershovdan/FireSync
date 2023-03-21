@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+</head>
+<body>
+{% include "blocks/menu.html" %}
+<main>
+    <section class="sec1">
+        <div class="sec1_list_topic" style="display: grid; grid-template-columns: 1fr 2fr 1fr; height: 50px; margin-top: 100px; font-family: Roboto, sans-serif; text-align: center;">
+            <p style="grid-column-start: 1; grid-column-end: 1; margin-left: 2vw; font-size: 1.2em; line-height: 50px; color: white; border-right: 2px solid #FFFFFF;">NAME</p>
+            <p style="grid-column-start: 2; grid-column-end: 3; margin-left: 2vw; font-size: 1.2em; line-height: 50px; color: white; border-right: 2px solid #FFFFFF;">PATH</p>
+            <p style="grid-column-start: 3; grid-column-end: 3; margin-left: 2vw; font-size: 1.2em; line-height: 50px; color: white;">KEY</p>
+        </div>
+        <div class="sec1_list">
+            {% for item in list %}
+                <div class="sec1_list_row" style="margin-left: 2vw;">
+                    <a href="/list/more_info/?id={{ item.id }}&key={{ item.key }}"style="text-decoration: none;"><p style="grid-column-start: 1; grid-column-end: 1; color: white;">{{ item.name }}</p></a>
+                    <p style="grid-column-start: 2; grid-column-end: 2; color: white; font-size: 0.8em; line-break: auto; overflow-wrap: break-word; width: calc(98vh / 2);">{{ item.path }}</p>
+                    <p style="grid-column-start: 3; grid-column-end: 3; color: white;">{{ item.key }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+    <section class="sec2">{% include "blocks/right_menu.html" %}</section>
+</main>
+</body>
+</html>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #212529;
+        overflow: hidden;
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .sec1 {
+        grid-column-start: 1; grid-column-end: 3;
+        height: 100vh;
+        overflow-y: scroll;
+    }
+
+    .sec2 {
+        grid-column-start: 3; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .sec1_list {
+        font-family: Roboto, sans-serif;
+        margin-top: 50px;
+    }
+
+    .sec1_list_row {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        min-height: 50px;
+        margin-bottom: 10px;
+    }
+</style>
+<script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script>
+    anime({
+        targets: '.menu_list',
+        height: '60px',
+        lineHeight: '60px',
+        backgroundColor: '#e33b37',
+        boxShadow: "inset 0px 0px 10px -3px rgba(0,0,0,0.1)",
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+    })
+</script>
+

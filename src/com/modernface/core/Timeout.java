@@ -1,5 +1,7 @@
 package com.modernface.core;
 
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -13,7 +15,7 @@ public class Timeout {
     public Timeout(int time) {
         this.time = time;
     }
-    public void start() throws URISyntaxException, SQLException, IOException {
+    public void start() throws URISyntaxException, SQLException, IOException, ParseException {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
         executor.schedule(() -> {
             try {
@@ -23,6 +25,7 @@ public class Timeout {
 
         WebServerChecker checker = new WebServerChecker();
         checker.checkList();
+        checker.forRightMenu();
         checker = null;
     }
 }

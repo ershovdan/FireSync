@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preferences</title>
+</head>
+<body>
+{% include "blocks/menu.html" %}
+<main>
+    <section class="sec1">
+        <section class="sec1_sec">
+            <div class="general_setting">
+                <h2>GENERAL SETTINGS</h2>
+            </div>
+            <div class="db_setting">
+                <h2>DB SETTINGS</h2>
+                <form class="db_from" method="POST">
+                    {% csrf_token %}
+                    <p style="grid-column-start: 1; grid-column-end: 4; grid-row-start: 1; grid-row-end: 1;">DB NAME</p>
+                    <input type="text" class="db_name" id="db_name" name="db_name" value="{{ db_data.name }}" style="grid-column-start: 1; grid-column-end: 4; grid-row-start: 2; grid-row-end: 2;" minlength="1">
+
+                    <p style="grid-column-start: 4; grid-column-end: 8; grid-row-start: 1; grid-row-end: 1;">HOST NAME</p>
+                    <input type="text" class="db_host" name="db_host" id="db_host" value="{{ db_data.host }}" style="grid-column-start: 4; grid-column-end: 8; grid-row-start: 2; grid-row-end: 2;" minlength="1">
+
+                    <p style="grid-column-start: 1; grid-column-end: 3; grid-row-start: 3; grid-row-end: 3;">USERNAME</p>
+                    <input type="text" class="db_user" name="db_user" id="db_user" value="{{ db_data.user }}" style="grid-column-start: 1; grid-column-end: 3; grid-row-start: 4; grid-row-end: 4;" minlength="1">
+
+                    <p style="grid-column-start: 3; grid-column-end: 5; grid-row-start: 3; grid-row-end: 3;">PASSWORD</p>
+                    <input type="password" class="db_password" name="db_password" id="db_password" value="{{ db_data.password }}" style="grid-column-start: 3; grid-column-end: 5; grid-row-start: 4; grid-row-end: 4;" placeholder="no password">
+
+                    <p style="grid-column-start: 5; grid-column-end: 8; grid-row-start: 3; grid-row-end: 3;">PORT</p>
+                    <input type="text" class="db_port" name="db_port" id="db_port" value="{{ db_data.port }}" style="grid-column-start: 5; grid-column-end: 8; grid-row-start: 4; grid-row-end: 4;" minlength="1">
+
+                    <input class="apply" type="submit" style="grid-column-start: 3; grid-column-end: 5; height: 4vh; margin-top: 20px; border-radius: 5px; border: none; outline: none; background-color: white; font-family: Roboto, sans-serif; font-weight: bold;" value="APPLY">
+                </form>
+                <div class="db_status" id="db_status">
+                    <p id="db_status_p"></p>
+                </div>
+            </div>
+            <div style="grid-row-start: 3;">
+                <p id="message" style="width: 70%; margin-left: 15%; font-family: Roboto, sans-serif;"></p>
+            </div>
+        </section>
+    </section>
+    <section class="sec2">{% include "blocks/right_menu.html" %}</section>
+</main>
+</body>
+</html>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #212529;
+        overflow: hidden;
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .sec1 {
+        grid-column-start: 1; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .sec2 {
+        grid-column-start: 3; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .sec1_sec {
+        display: grid;
+        grid-template-rows: 4fr 4fr 1fr;
+        height: 100vh;
+    }
+
+    .sec1_sec h2 {
+        font-family: Roboto, sans-serif;
+        color: white;
+        text-align: center;
+    }
+
+    .db_setting {
+        grid-row-start: 2; grid-row-end: 2;
+    }
+
+    .general_setting {
+        margin-top: 100px;
+        grid-row-start: 1; grid-row-end: 1;
+    }
+
+    .db_from {
+        width: 70%;
+        margin-left: 15%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        column-gap: 20px;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        row-gap: 14px;
+        margin-top: 20px;
+    }
+
+    .db_from input {
+        border: none;
+        outline: none;
+        font-family: Roboto, sans-serif;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .db_from p {
+        color: white;
+        font-family: Roboto, sans-serif;
+        line-height: 1.5em;
+        margin-top: 10px;
+    }
+
+    .apply:hover {
+        cursor: pointer;
+    }
+
+    .db_status {
+        margin-top: 20px;
+        background-color: black;
+        width: 60%;
+        margin-left: 20%;
+        height: 4vh;
+        border-radius: 5px;
+    }
+
+    .db_status p {
+        line-height: 4vh;
+        text-align: center;
+        font-family: Roboto, sans-serif;
+        font-weight: bold;
+    }
+</style>
+<script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script>
+    anime({
+        targets: '.menu_preferences',
+        height: '60px',
+        lineHeight: '60px',
+        backgroundColor: '#e33b37',
+        boxShadow: "inset 0px 0px 10px -3px rgba(0,0,0,0.1)",
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+    })
+
+    function loop() {
+        let message = []
+
+        if (document.getElementById("db_name").value !=  "{{ db_data.name }}") {
+            message.push("DB name")
+        }
+        if (document.getElementById("db_host").value !=  "{{ db_data.host }}") {
+            message.push("DB host")
+        }
+        if (document.getElementById("db_user").value !=  "{{ db_data.user }}") {
+            message.push("DB username")
+        }
+        if (document.getElementById("db_password").value !=  "{{ db_data.password }}") {
+            message.push("DB password")
+        }
+        if (document.getElementById("db_port").value !=  "{{ db_data.port }}") {
+            message.push("DB port")
+        }
+
+        console.log(message)
+
+        let final_message = "You're going to change: "
+
+        for (let i = 0; i < message.length; i++) {
+            if (i == message.length - 1) {
+                final_message += message.at(0)
+            } else {
+                final_message += message.at(0) + ", "
+            }
+        }
+
+        console.log(final_message)
+
+        if (final_message == "You're going to change: ") {
+            document.getElementById("message").style.color = "white"
+            document.getElementById("message").innerHTML = "YOU HAVE NO CHANGES"
+        } else {
+            document.getElementById("message").style.color = "#e33b37"
+            document.getElementById("message").innerHTML = final_message
+        }
+
+        if ("{{ db_status }}" == "false") {
+            document.getElementById("db_status").style.background = "#e33b37"
+            document.getElementById("db_status_p").innerHTML = "ERROR"
+        } else {
+            document.getElementById("db_status").style.background = "green"
+            document.getElementById("db_status_p").innerHTML = "CONNECTED"
+        }
+
+        setTimeout(loop, 100)
+    }
+
+    loop()
+</script>
+

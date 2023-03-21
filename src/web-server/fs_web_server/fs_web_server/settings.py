@@ -107,7 +107,8 @@ print(os.path.join(BASE_DIR.parent.parent, "buffer", "zipped"))
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR.parent.parent, "buffer", "zipped")
+    os.path.join(BASE_DIR.parent.parent, "buffer", "zipped"),
+    os.path.join(BASE_DIR.parent.parent)
 )
 
 # Default primary key field type

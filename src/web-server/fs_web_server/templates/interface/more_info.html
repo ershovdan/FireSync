@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+</head>
+<body>
+<main>
+    <section class="sec1">
+        <a href="/list"><p class="back_but">BACK</p></a>
+        <div class="info_cont">
+            <p style="color: white; grid-column-start: 1; grid-column-end: 1; font-size: 1.3em; font-weight: bold; line-height: calc(1em + 20px)">{{ main.name }}</p>
+            <p style="color: white; grid-column-start: 1; grid-column-end: 1; line-height: calc(1em + 20px); margin-top: 20px;">KEY: {{ main.key }}</p>
+            <p style="color: white; grid-column-start: 1; grid-column-end: 3; line-height: calc(1em + 20px); line-break: auto; overflow-wrap: anywhere; width: 90%; margin-top: 20px;">PATH: <i>{{ main.path }}</i></p>
+
+            <p style="color: white; grid-column-start: 1; grid-column-end: 1; line-height: calc(1em + 20px); margin-top: 20px;" id="status_p">STATUS:</p>
+            <div class="progress_cont" id="progress_cont" style="grid-column-start: 1; grid-column-end: 1; margin-top: 20px; width: 100%">
+                <div class="progress_bar" id="progress_bar">
+                    <p id="progress_bar_p" style="font-weight: bold;"></p>
+                </div>
+            </div>
+
+
+            <form style="color: white; grid-column-start: 2; grid-column-end: 2;  grid-row-start: 1;">
+                <div class="new_name_button hover_div" id="new_name_button" style="color: black; background-color: white; width: 40%; padding: 10px; border-radius: 5px; font-weight: bold; grid-row-start: 0; grid-row-end: 0;"><p style="text-align: center;">CHANGE NAME</p></div>
+                <input class="new_name" type="text" placeholder="New name" style="width: 95%; grid-row-start: 1; grid-row-end: 1;" name="new_name">
+            </form>
+        </div>
+    </section>
+    <section class="sec2">{% include "blocks/right_menu.html" %}</section>
+</main>
+</body>
+</html>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #212529;
+        overflow: hidden;
+        font-family: Roboto, sans-serif;
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .sec1 {
+        grid-column-start: 1; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .sec2 {
+        grid-column-start: 3; grid-column-end: 3;
+        height: 100vh;
+    }
+
+    .back_but {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        color: white;
+        text-decoration: none;
+        background-color: #FE413C;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+    .back_but:hover {
+        background-color: #e33b37;
+        transition: .5s;
+    }
+
+    .info_cont {
+        margin-top: 100px;
+        margin-left: 5%;
+        width: 90%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .info_cont form input {
+        border: none;
+        outline: none;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .hover_div:hover{
+        cursor: pointer;
+    }
+
+    .progress_bar {
+        width: 0;
+        height: 40px;
+        background-color: white;
+    }
+
+    .progress_bar p {
+        line-height: 40px;
+    }
+</style>
+<script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script>
+    anime({
+        targets: '.new_name',
+        translateX: -3000,
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+        duration: 0
+    })
+
+    anime({
+        targets: '.back_but',
+        translateX: -1000,
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+        duration: 0
+    })
+
+    anime({
+        targets: '.back_but',
+        translateX: 0,
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+    })
+
+    document.getElementById("new_name_button").onclick = function () {
+        document.getElementById("new_name_button").style.display = "none"
+
+        anime({
+            targets: '.new_name',
+            translateX: 0,
+            easing: 'easeInOutQuad',
+            direction: 'normal',
+            duration: 1000
+        })
+    }
+
+    let status
+    let total_shares
+
+
+    async function getData(check) {
+        if (check == "status") {
+            let response = await fetch("/operations_get_data?check=status&id={{ main.id }}&key={{ main.key }}", {
+                method: 'get',
+                headers: {
+                    'X-Requested-Width': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            let data = await response.json()
+
+            status = data
+            return data
+        }
+    }
+
+    function loop() {
+        getData("status")
+
+
+        try {
+            let st
+            st = status["answer"]
+            status = st
+        } catch (error) {}
+
+
+
+        if (status == 1) {
+            document.getElementById("status_p").innerHTML = "STATUS: ACTIVE"
+            document.getElementById("progress_bar").style.width = "100%"
+            document.getElementById("progress_bar").style.backgroundColor = "#228b22"
+            document.getElementById("progress_bar_p").innerHTML = "ACTIVE"
+            document.getElementById("progress_bar_p").style.textAlign = "center"
+        }
+        if (status == 2) {
+            document.getElementById("status_p").innerHTML = "STATUS: PAUSED"
+            document.getElementById("progress_bar").style.width = "100%"
+            document.getElementById("progress_bar").style.backgroundColor = "yellow"
+            document.getElementById("progress_bar_p").innerHTML = "PAUSED"
+            document.getElementById("progress_bar_p").style.textAlign = "center"
+        }
+        if (status == 5) {
+            document.getElementById("status_p").innerHTML = "STATUS: JUST CREATED"
+            document.getElementById("progress_bar").style.width = "100%"
+            document.getElementById("progress_bar").style.backgroundColor = "#00bfff"
+            document.getElementById("progress_bar_p").innerHTML = "JUST CREATED"
+            document.getElementById("progress_bar_p").style.textAlign = "center"
+        }
+        if (status == 4) {
+            document.getElementById("status_p").innerHTML = "STATUS: JUST CREATED"
+            document.getElementById("progress_bar").style.width = "0%"
+            document.getElementById("progress_cont").style.border = "5px solid #FFFFFF"
+            document.getElementById("progress_cont").style.backgroundColor = "rgba(255,255,255,0.18)"
+            document.getElementById("progress_bar").style.backgroundColor = "FFFFFF"
+            document.getElementById("progress_bar_p").style.textAlign = "center"
+            document.getElementById("progress_bar").style.marginLeft = "20px"
+
+            let progress = httpGet("/static/db/right_menu/zip_progress/" + "{{ main.key }}" + "op" + "{{ main.id }}" + ".txt?q=" + (Math.random() * 100000).toString())
+
+            if (progress.length <= 3) {
+                document.getElementById("progress_bar_p").innerHTML = "ZIPPING: " + progress + "%"
+            }
+        }
+
+
+
+
+        //right_menu
+        async function getDataRightMenu(check) {
+            if (check == "total_shares") {
+                let response = await fetch("/operations_get_data?check=total_shares", {
+                    method: 'get',
+                    headers: {
+                        'X-Requested-Width': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                let data = await response.json()
+
+                total_shares = data
+                return data
+            }
+        }
+
+        getDataRightMenu("total_shares")
+
+        try {
+            let t_s = total_shares["answer"]
+            total_shares = t_s
+            document.getElementById("total_shares").innerHTML = "YOU HAVE " + total_shares + " ACTIVE SHARES"
+        } catch (error) {}
+
+
+        setTimeout(loop, 500)
+    }
+
+    loop()
+
+</script>
+
