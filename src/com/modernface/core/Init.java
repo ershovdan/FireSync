@@ -65,6 +65,15 @@ public class Init {
         st.execute();
         st.close();
 
+
+
+
+
+
+        st = conn.prepareStatement("DELETE FROM \"Connected\" WHERE amount > -1;");
+        st.execute();
+        st.close();
+
         conn.close();
     }
 

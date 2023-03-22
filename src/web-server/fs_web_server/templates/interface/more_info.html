@@ -1,12 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
 <head>
     <meta charset="UTF-8">
     <title>List</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
 </head>
 <body>
 <main>
@@ -25,9 +25,27 @@
             </div>
 
 
-            <form style="color: white; grid-column-start: 2; grid-column-end: 2;  grid-row-start: 1;">
+            <form style="color: white; grid-column-start: 2; grid-column-end: 2;  grid-row-start: 1; height: 80px;" method="POST">
+                {% csrf_token %}
                 <div class="new_name_button hover_div" id="new_name_button" style="color: black; background-color: white; width: 40%; padding: 10px; border-radius: 5px; font-weight: bold; grid-row-start: 0; grid-row-end: 0;"><p style="text-align: center;">CHANGE NAME</p></div>
                 <input class="new_name" type="text" placeholder="New name" style="width: 95%; grid-row-start: 1; grid-row-end: 1;" name="new_name">
+            </form>
+        </div>
+
+        <h3 style="color: white; text-align: center; font-family: Roboto, sans-serif; margin-top: 50px;">NOW USING THIS SHARE</h3>
+        <div style="width: calc(100vw / 1.5 - 26vw); margin-left: 11vw; margin-top: 20px;">
+            <canvas id="myChart"></canvas>
+            <div class="choose_graph">
+                <div id="graph_5min"><p>5 min</p></div>
+                <div id="graph_30min"><p>30 min</p></div>
+                <div id="graph_60min"><p>1 h</p></div>
+            </div>
+        </div>
+
+        <div>
+            <form method="POST" style="display: flex; justify-content: center; margin-top: 30px;">
+                {% csrf_token %}
+                <input class="submit" type="submit" value="APPLY" style="color: black; font-weight: bold; font-family: Roboto, sans-serif; border: none; outline: none; border-radius: 5px; padding: 10px 50px 10px 50px; font-size: 1.2em;">
             </form>
         </div>
     </section>
@@ -108,12 +126,45 @@
     .progress_bar p {
         line-height: 40px;
     }
+
+    .submit:hover {
+        cursor: pointer;
+    }
+
+    .choose_graph {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .choose_graph div {
+        background-color: white;
+        width: 5vw;
+        padding: 7px;
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+    }
+    
+    .choose_graph div:hover {
+        cursor: pointer;
+    }
 </style>
 <script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     anime({
         targets: '.new_name',
         translateX: -3000,
+        easing: 'easeInOutQuad',
+        direction: 'normal',
+        duration: 0
+    })
+
+    anime({
+        targets: '.submit',
+        translateY: 3000,
         easing: 'easeInOutQuad',
         direction: 'normal',
         duration: 0
@@ -146,6 +197,10 @@
         })
     }
 
+    let gr = {}
+    let gr_min = 5
+
+
     let status
     let total_shares
 
@@ -165,64 +220,9 @@
             status = data
             return data
         }
-    }
-
-    function loop() {
-        getData("status")
-
-
-        try {
-            let st
-            st = status["answer"]
-            status = st
-        } catch (error) {}
-
-
-
-        if (status == 1) {
-            document.getElementById("status_p").innerHTML = "STATUS: ACTIVE"
-            document.getElementById("progress_bar").style.width = "100%"
-            document.getElementById("progress_bar").style.backgroundColor = "#228b22"
-            document.getElementById("progress_bar_p").innerHTML = "ACTIVE"
-            document.getElementById("progress_bar_p").style.textAlign = "center"
-        }
-        if (status == 2) {
-            document.getElementById("status_p").innerHTML = "STATUS: PAUSED"
-            document.getElementById("progress_bar").style.width = "100%"
-            document.getElementById("progress_bar").style.backgroundColor = "yellow"
-            document.getElementById("progress_bar_p").innerHTML = "PAUSED"
-            document.getElementById("progress_bar_p").style.textAlign = "center"
-        }
-        if (status == 5) {
-            document.getElementById("status_p").innerHTML = "STATUS: JUST CREATED"
-            document.getElementById("progress_bar").style.width = "100%"
-            document.getElementById("progress_bar").style.backgroundColor = "#00bfff"
-            document.getElementById("progress_bar_p").innerHTML = "JUST CREATED"
-            document.getElementById("progress_bar_p").style.textAlign = "center"
-        }
-        if (status == 4) {
-            document.getElementById("status_p").innerHTML = "STATUS: JUST CREATED"
-            document.getElementById("progress_bar").style.width = "0%"
-            document.getElementById("progress_cont").style.border = "5px solid #FFFFFF"
-            document.getElementById("progress_cont").style.backgroundColor = "rgba(255,255,255,0.18)"
-            document.getElementById("progress_bar").style.backgroundColor = "FFFFFF"
-            document.getElementById("progress_bar_p").style.textAlign = "center"
-            document.getElementById("progress_bar").style.marginLeft = "20px"
-
-            let progress = httpGet("/static/db/right_menu/zip_progress/" + "{{ main.key }}" + "op" + "{{ main.id }}" + ".txt?q=" + (Math.random() * 100000).toString())
-
-            if (progress.length <= 3) {
-                document.getElementById("progress_bar_p").innerHTML = "ZIPPING: " + progress + "%"
-            }
-        }
-
-
-
-
-        //right_menu
-        async function getDataRightMenu(check) {
-            if (check == "total_shares") {
-                let response = await fetch("/operations_get_data?check=total_shares", {
+        if (check == "graphConnected") {
+            if (gr_min == 5) {
+                let response = await fetch("/operations_get_data?check=connected_users_5", {
                     method: 'get',
                     headers: {
                         'X-Requested-Width': 'XMLHttpRequest',
@@ -232,21 +232,263 @@
 
                 let data = await response.json()
 
-                total_shares = data
-                return data
+                gr = data
+
+                let xValues = gr["time"]
+                let yValues = gr["users"]
+
+                new Chart("myChart", {
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            {#backgroundColor: "rgba(0,0,255,1.0)",#}
+                            borderColor: "rgb(255,255,255)",
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        animation: {
+                            duration: 0
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    autoSkip: true,
+                                    maxTicksLimit: 10
+                                }
+                            }]
+                        }
+                    }
+                })
             }
         }
+        if (gr_min == 30) {
+                let response = await fetch("/operations_get_data?check=connected_users_30", {
+                    method: 'get',
+                    headers: {
+                        'X-Requested-Width': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                })
 
-        getDataRightMenu("total_shares")
+                let data = await response.json()
 
-        try {
-            let t_s = total_shares["answer"]
-            total_shares = t_s
-            document.getElementById("total_shares").innerHTML = "YOU HAVE " + total_shares + " ACTIVE SHARES"
-        } catch (error) {}
+                gr = data
+
+                let xValues = gr["time"]
+                let yValues = gr["users"]
+
+                new Chart("myChart", {
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            {#backgroundColor: "rgba(0,0,255,1.0)",#}
+                            borderColor: "rgb(255,255,255)",
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        animation: {
+                            duration: 0
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    autoSkip: true,
+                                    maxTicksLimit: 10
+                                }
+                            }]
+                        }
+                    }
+                })
+            }
+            if (gr_min == 60) {
+                    let response = await fetch("/operations_get_data?check=connected_users_60", {
+                        method: 'get',
+                        headers: {
+                            'X-Requested-Width': 'XMLHttpRequest',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+
+                    let data = await response.json()
+
+                    gr = data
+
+                    let xValues = gr["time"]
+                    let yValues = gr["users"]
+
+                    new Chart("myChart", {
+                        type: "line",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                {#backgroundColor: "rgba(0,0,255,1.0)",#}
+                                borderColor: "rgb(255,255,255)",
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            animation: {
+                                duration: 0
+                            },
+                            legend: {
+                                display: false
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        stepSize: 1
+                                    }
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        autoSkip: true,
+                                        maxTicksLimit: 10
+                                    }
+                                }]
+                            }
+                        }
+                    })
+                }
+        }
+
+        document.getElementById("graph_5min").onclick = function () {
+            gr_min = 5
+        }
+        document.getElementById("graph_30min").onclick = function () {
+            gr_min = 30
+        }
+        document.getElementById("graph_60min").onclick = function () {
+            gr_min = 60
+        }
+
+        function loop() {
+            if (gr_min == 5) {
+                document.getElementById("graph_5min").style.backgroundColor = "#c2c2c2"
+                document.getElementById("graph_30min").style.backgroundColor = "white"
+                document.getElementById("graph_60min").style.backgroundColor = "white"
+            }
+            if (gr_min == 30) {
+                document.getElementById("graph_30min").style.backgroundColor = "#c2c2c2"
+                document.getElementById("graph_5min").style.backgroundColor = "white"
+                document.getElementById("graph_60min").style.backgroundColor = "white"
+            }
+            if (gr_min == 60) {
+                document.getElementById("graph_60min").style.backgroundColor = "#c2c2c2"
+                document.getElementById("graph_30min").style.backgroundColor = "white"
+                document.getElementById("graph_5min").style.backgroundColor = "white"
+            }
+
+            getData("status")
+            getData("graphConnected")
 
 
-        setTimeout(loop, 500)
+            try {
+                let st
+                st = status["answer"]
+                status = st
+            } catch (error) {
+            }
+
+
+            if (status == 1) {
+                document.getElementById("status_p").innerHTML = "STATUS: ACTIVE"
+                document.getElementById("progress_bar").style.width = "100%"
+                document.getElementById("progress_bar").style.backgroundColor = "#228b22"
+                document.getElementById("progress_bar_p").innerHTML = "ACTIVE"
+                document.getElementById("progress_bar_p").style.textAlign = "center"
+            }
+            if (status == 2) {
+                document.getElementById("status_p").innerHTML = "STATUS: PAUSED"
+                document.getElementById("progress_bar").style.width = "100%"
+                document.getElementById("progress_bar").style.backgroundColor = "yellow"
+                document.getElementById("progress_bar_p").innerHTML = "PAUSED"
+                document.getElementById("progress_bar_p").style.textAlign = "center"
+            }
+            if (status == 5) {
+                document.getElementById("status_p").innerHTML = "STATUS: JUST CREATED"
+                document.getElementById("progress_bar").style.width = "100%"
+                document.getElementById("progress_bar").style.backgroundColor = "#00bfff"
+                document.getElementById("progress_bar_p").innerHTML = "JUST CREATED"
+                document.getElementById("progress_bar_p").style.textAlign = "center"
+            }
+            if (status == 4) {
+                document.getElementById("status_p").innerHTML = "STATUS: JUST CREATED"
+                document.getElementById("progress_bar").style.width = "0%"
+                document.getElementById("progress_cont").style.border = "5px solid #FFFFFF"
+                document.getElementById("progress_cont").style.backgroundColor = "rgba(255,255,255,0.18)"
+                document.getElementById("progress_bar").style.backgroundColor = "FFFFFF"
+                document.getElementById("progress_bar_p").style.textAlign = "center"
+                document.getElementById("progress_bar").style.marginLeft = "20px"
+
+                let progress = httpGet("/static/db/right_menu/zip_progress/" + "{{ main.key }}" + "op" + "{{ main.id }}" + ".txt?q=" + (Math.random() * 100000).toString())
+
+                if (progress.length <= 3) {
+                    document.getElementById("progress_bar_p").innerHTML = "ZIPPING: " + progress + "%"
+                }
+            }
+
+
+            //right_menu
+            async function getDataRightMenu(check) {
+                if (check == "total_shares") {
+                    let response = await fetch("/operations_get_data?check=total_shares", {
+                        method: 'get',
+                        headers: {
+                            'X-Requested-Width': 'XMLHttpRequest',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+
+                    let data = await response.json()
+
+                    total_shares = data
+                    return data
+                }
+            }
+
+            getDataRightMenu("total_shares")
+
+            try {
+                let t_s = total_shares["answer"]
+                total_shares = t_s
+                document.getElementById("total_shares").innerHTML = "YOU HAVE " + total_shares + " ACTIVE SHARES"
+            } catch (error) {
+            }
+
+
+            setTimeout(loop, 500)
     }
 
     loop()

@@ -1,5 +1,6 @@
 package com.modernface.core;
 
+import com.modernface.tools.UserStats;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -12,20 +13,37 @@ import java.util.concurrent.TimeUnit;
 
 public class Timeout {
     int time;
-    public Timeout(int time) {
+    int lowFreq;
+    public Timeout(int time, int lowFreq) {
         this.time = time;
+        this.lowFreq = lowFreq;
     }
     public void start() throws URISyntaxException, SQLException, IOException, ParseException {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
-        executor.schedule(() -> {
-            try {
-                this.start();
-            } catch (Exception exc) {}
-        }, this.time, TimeUnit.MILLISECONDS);
+        Runnable task = new Runnable() {
+            public void run() {
+                try {
+                    WebServerChecker checker = new WebServerChecker();
+                    checker.checkList();
+                    checker.forRightMenu();
+                } catch (Exception exc) {}
+            }
+        };
 
-        WebServerChecker checker = new WebServerChecker();
-        checker.checkList();
-        checker.forRightMenu();
-        checker = null;
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(task, 0, this.time, TimeUnit.MILLISECONDS);
+    }
+
+    public void startLowFreq() throws URISyntaxException, SQLException, IOException, ParseException {
+        Runnable task = new Runnable() {
+            public void run() {
+                try {
+                    UserStats userStats = new UserStats();
+                    userStats.amountOfConnected();
+                } catch (Exception exc) {}
+            }
+        };
+
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(task, 0, this.lowFreq, TimeUnit.MILLISECONDS);
     }
 }

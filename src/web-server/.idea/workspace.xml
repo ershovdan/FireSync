@@ -34,7 +34,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/out/production/web-server/fs_web_server/templates/interface",
+    "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/out/production/web-server/fs_web_server/static/js",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -43,12 +43,14 @@
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
-      "sqlite"
+      "sqlite",
+      "postgresql"
     ]
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/fs_web_server/static/js" />
       <recent name="$PROJECT_DIR$/fs_web_server/templates/interface" />
     </key>
   </component>
@@ -110,7 +112,7 @@
       <option name="presentableId" value="Default" />
       <updated>1678792136006</updated>
       <workItem from="1678792137256" duration="41000" />
-      <workItem from="1678792192530" duration="57223000" />
+      <workItem from="1678792192530" duration="70337000" />
     </task>
     <servers />
   </component>

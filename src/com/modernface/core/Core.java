@@ -21,8 +21,9 @@ class Core {
         WebServerChecker ch = new WebServerChecker();
         ch.startWebServer();
 
-        Timeout tm = new Timeout(800);
+        Timeout tm = new Timeout(800, 10000);
         tm.start();
+        tm.startLowFreq();
 
 
 //        URL website = new URL("https://file-examples.com/storage/fe7e2bfeed6401e75b22832/2017/10/file_example_JPG_500kB.jpg");

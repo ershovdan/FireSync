@@ -6,6 +6,7 @@ import pathlib
 import sqlite3
 import os
 import psycopg2
+import datetime
 
 
 module_dir = pathlib.Path(os.path.dirname(__file__))
@@ -92,6 +93,7 @@ def more_info(request):
     except Exception:
         pass
 
+
     cur.execute('SELECT * FROM "List" WHERE id = ' + request.GET["id"] + ';')
 
     context = {}
@@ -100,7 +102,9 @@ def more_info(request):
         context["main"] = {"id": i[0], "path": i[2], "status": i[3], "name": i[1], "key": i[4]}
 
 
-    print(context)
+    if request.method == "POST":
+        cur.execute('UPDATE "List" SET name = ' + "'" + request.POST["new_name"] + "'" + "WHERE id = " + str(i[0]) + ";")
+
 
     conn.commit()
     conn.close()
@@ -132,6 +136,57 @@ def getData(request):
         conn.commit()
         conn.close()
         return JsonResponse({"answer": str(count)})
+    elif request.GET["check"] == "connected_users_5":
+        cur.execute('SELECT * FROM "Connected" ORDER BY "time" DESC LIMIT 30;')
+
+        time = []
+        users = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            users.append(i[1])
+
+        time.reverse()
+        users.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "connected_users_30":
+        cur.execute('SELECT * FROM "Connected" ORDER BY "time" DESC LIMIT 180;')
+
+        time = []
+        users = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            users.append(i[1])
+
+        time.reverse()
+        users.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "connected_users_60":
+        cur.execute('SELECT * FROM "Connected" ORDER BY "time" DESC LIMIT 360;')
+
+        time = []
+        users = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            users.append(i[1])
+
+        time.reverse()
+        users.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "users": users})
 
     cur.execute('SELECT * FROM "List" WHERE id=' + request.GET["id"] + "AND key='" + request.GET["key"] +  "';")
 
