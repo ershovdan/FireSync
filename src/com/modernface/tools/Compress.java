@@ -27,12 +27,14 @@ public class Compress {
     Path pathBase;
     Path pathBaseParent;
     String key;
+    Path pathToData;
 
     public Compress(String pathToDir, String key) throws URISyntaxException {
         this.pathToDir = Paths.get(pathToDir);
         this.pathBase = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         this.pathBaseParent = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
         this.key = key;
+        this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
     }
 
     private Path shortPath(String absPath) {
@@ -63,12 +65,14 @@ public class Compress {
 
     private long getSizeOfZippedFiles(String operationName) throws IOException {
         HashMap<String, String> files = new HashMap<>();
-        this.listfWithoutRec(files, this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/");
+//        this.listfWithoutRec(files, this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/");
+        this.listfWithoutRec(files, String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", this.key + operationName)));
 
         long sum = 0;
 
         for (Map.Entry<String, String> file : files.entrySet()) {
-            sum += Files.size(Path.of(this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/" + file.getKey()));
+//            sum += Files.size(Path.of(this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/" + file.getKey()));
+            sum += Files.size(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", this.key + operationName, file.getKey()));
         }
 
         return sum;
@@ -79,7 +83,7 @@ public class Compress {
     }
 
     private void clearPreviousZipped(String operationName) {
-        ArrayList<File> files = (ArrayList<File>) FileUtils.listFilesAndDirs(new File(this.pathBaseParent + "/buffer/zipped/"), new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
+        ArrayList<File> files = (ArrayList<File>) FileUtils.listFilesAndDirs(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped"))), new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
         String fileName;
         for (File file : files) {
             try {
@@ -97,8 +101,6 @@ public class Compress {
 
     public void zipAll(String operationName) throws IOException, SQLException, ParseException {
         if (Files.exists(this.pathToDir) &&  Files.isDirectory(this.pathToDir)) {
-            System.out.println("zipping " + operationName);
-
             ArrayList<File> allFilesList = new ArrayList<>();
 
             this.clearPreviousZipped(operationName);
@@ -110,7 +112,7 @@ public class Compress {
                 allFilesList.add(new File(this.pathToDir + "/" + file.getKey()));
             }
 
-            GetDbInfo dbInfo = new GetDbInfo(this.pathBaseParent + "/cfg/db.cfg");
+            GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
             HashMap<String, String> DBdata = dbInfo.getCFG();
 
             String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
@@ -123,11 +125,11 @@ public class Compress {
             st.execute();
             st.close();
 
-            File progressFile = new File(this.pathBaseParent + "/db/right_menu/zip_progress/" + this.key + operationName + ".txt");
+            File progressFile = new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress", this.key + operationName + ".txt")));
             progressFile.createNewFile();
-            Files.writeString(Path.of(this.pathBaseParent + "/db/right_menu/zip_progress/" + this.key + operationName + ".txt"), "0");
+            Files.writeString(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress", this.key + operationName + ".txt"), "0");
 
-            new File(this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/").mkdir();
+            new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", this.key + operationName))).mkdir();
 
             long size = this.getSizeOfUnzippedFiles();
             long sum = 0;
@@ -136,19 +138,19 @@ public class Compress {
                 File file = allFilesList.get(i);;
 
                 if (file.isDirectory()) {
-                    ZipFile zip = new ZipFile(this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/" + Integer.toHexString(i) + ".zip");
+                    ZipFile zip = new ZipFile(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", this.key + operationName, Integer.toHexString(i) + ".zip")));
                     zip.addFolder(file);
                     sum += Files.walk(Path.of(file.getPath())).mapToLong(p -> p.toFile().length()).sum();
                 } else {
-                    ZipFile zip = new ZipFile(this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + "/" + Integer.toHexString(i) + ".zip");
+                    ZipFile zip = new ZipFile(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", this.key + operationName, Integer.toHexString(i) + ".zip")));
                     zip.addFile(file);
                     sum += Files.walk(Path.of(file.getPath())).mapToLong(p -> p.toFile().length()).sum();
                 }
 
-                Files.writeString(Path.of(this.pathBaseParent + "/db/right_menu/zip_progress/" + this.key + operationName + ".txt"), Integer.toHexString((int) (((double) sum/size) * 100)));
+                Files.writeString(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress", this.key + operationName + ".txt"), Integer.toHexString((int) (((double) sum/size) * 100)));
             }
 
-            Files.writeString(Path.of(this.pathBaseParent + "/db/right_menu/zip_progress/" + this.key + operationName + ".txt"), "100");
+            Files.writeString(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress", this.key + operationName + ".txt"), "100");
 
             allFiles.clear();
 
@@ -165,7 +167,7 @@ public class Compress {
             json.put("all_files", allFilesStr);
             json.put("zippedSize", getSizeOfZippedFiles(operationName));
             json.put("unzippedSize", size);
-            Files.writeString(Path.of(this.pathBaseParent + "/buffer/zipped/" + this.key + operationName + ".json"), json.toJSONString());
+            Files.writeString(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", this.key + operationName + ".json"), json.toJSONString());
 
             st = conn.prepareStatement("UPDATE \"List\" SET status = 1 WHERE id = " + operationName.substring(2) + ";");
             st.execute();
@@ -178,19 +180,38 @@ public class Compress {
         }
     }
 
-    public void unzipAll(String operationName, String pathToExtract) throws ZipException, URISyntaxException {
-        if (Files.exists(pathToDir) &&  Files.isDirectory(pathToDir)) {
-            HashMap<String, String> files = new HashMap<>();
-            listfWithoutRec(files, this.pathBaseParent + "/buffer/zipped/" + operationName + "/");
+    public void smallZip(String operationName, String path, String outKey) throws IOException, ParseException, SQLException {
+        GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
+        HashMap<String, String> DBdata = dbInfo.getCFG();
 
-            new File(this.pathBaseParent + "/" + operationName).mkdir();
+        String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
+        Properties props = new Properties();
+        props.setProperty("user", DBdata.get("user"));
+        props.setProperty("password", DBdata.get("password"));
+        Connection conn = DriverManager.getConnection(url, props);
 
-            for (String file : files.keySet()) {
-                new ZipFile(this.pathBaseParent + "/buffer/zipped/" + operationName + "/" + file).extractAll(pathToExtract);
-            }
+        Path filePath = Paths.get(String.valueOf(this.pathToDir) + "/s", path);
 
+        File requestedFile = new File(String.valueOf(Paths.get(String.valueOf(this.pathToDir), path)));
+
+        if (requestedFile.isFile()) {
+            ZipFile zip = new ZipFile(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "fast_zipped", outKey + ".zip")));
+            zip.addFile(requestedFile);
+
+            System.out.println(outKey);
+
+            PreparedStatement st = conn.prepareStatement("UPDATE \"Files\" SET status = 2 WHERE out_key = '" + outKey + "';");
+            st.execute();
+            st.close();
         } else {
-            throw new ZipException("Not exists or is not a directory");
+            ZipFile zip = new ZipFile(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "fast_zipped", outKey + ".zip")));
+            zip.addFolder(requestedFile);
+
+            PreparedStatement st = conn.prepareStatement("UPDATE \"Files\" SET status = 2 WHERE out_key = '" + outKey + "';");
+            st.execute();
+            st.close();
         }
+
+        conn.close();
     }
 }

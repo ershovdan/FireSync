@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.*;
 
+import com.modernface.tools.GetDbInfo;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.postgresql.util.PSQLException;
@@ -21,19 +22,16 @@ import org.sqlite.SQLiteException;
 public class WebServerChecker {
     Path pathBase;
     Path pathBaseParent;
-    Properties props = new Properties();
+    Path pathToData;
 
     public WebServerChecker() throws URISyntaxException, SQLException {
         this.pathBase = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         this.pathBaseParent = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
-
-        this.props.setProperty("user", "fsync");
-        this.props.setProperty("password", "");
+        this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
     }
 
 
     public void forRightMenu() throws IOException, SQLException {
-
         String url = "jdbc:sqlite:" + this.pathBaseParent + "/db/operations.db";
         Connection con = DriverManager.getConnection(url);
         Statement stmt = con.createStatement();
@@ -68,7 +66,14 @@ public class WebServerChecker {
     }
 
     public void checkList() throws SQLException, URISyntaxException, IOException, ParseException {
-        Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/FireSync", this.props);
+        GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
+        HashMap<String, String> DBdata = dbInfo.getCFG();
+
+        String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
+        Properties props = new Properties();
+        props.setProperty("user", DBdata.get("user"));
+        props.setProperty("password", DBdata.get("password"));
+        Connection conn = DriverManager.getConnection(url, props);
 
         int lastID = 0;
 

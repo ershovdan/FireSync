@@ -22,9 +22,12 @@ public class Timeout {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    WebServerChecker checker = new WebServerChecker();
-                    checker.checkList();
-                    checker.forRightMenu();
+                    WebServerChecker webServerChecker = new WebServerChecker();
+                    webServerChecker.checkList();
+                    webServerChecker.forRightMenu();
+
+                    SmallZipChecker smallZipChecker = new SmallZipChecker();
+                    smallZipChecker.check();
                 } catch (Exception exc) {}
             }
         };

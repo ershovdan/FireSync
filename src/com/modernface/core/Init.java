@@ -24,14 +24,16 @@ import java.util.Properties;
 public class Init {
     Path pathBase;
     Path pathBaseParent;
+    Path pathToData;
 
     Init() throws URISyntaxException {
         this.pathBase = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         this.pathBaseParent = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+        this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
     }
 
     public void initDB() throws SQLException, IOException, ParseException {
-        GetDbInfo dbInfo = new GetDbInfo(this.pathBaseParent + "/cfg/db.cfg");
+        GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
         String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
@@ -65,10 +67,30 @@ public class Init {
         st.execute();
         st.close();
 
+        st = conn.prepareStatement("" +
+            "CREATE TABLE IF NOT EXISTS public.\"Connected\"\n" +
+            "(\n" +
+            "    \"time\" timestamp without time zone NOT NULL,\n" +
+            "    amount integer,\n" +
+            "    CONSTRAINT \"Connected_pkey\" PRIMARY KEY (\"time\")\n" +
+            ")"
+        );
+        st.execute();
+        st.close();
 
-
-
-
+        st = conn.prepareStatement("" +
+            "CREATE TABLE IF NOT EXISTS public.\"Files\"\n" +
+            "(\n" +
+            "    in_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( CYCLE INCREMENT 1 START 0 MINVALUE 0 MAXVALUE 2147483647 CACHE 1 ),\n" +
+            "    id integer NOT NULL,\n" +
+            "    status integer,\n" +
+            "    path text COLLATE pg_catalog.\"default\",\n" +
+            "    out_key text COLLATE pg_catalog.\"default\",\n" +
+            "    CONSTRAINT \"Files_pkey\" PRIMARY KEY (in_id)\n" +
+            ")"
+        );
+        st.execute();
+        st.close();
 
         st = conn.prepareStatement("DELETE FROM \"Connected\" WHERE amount > -1;");
         st.execute();
@@ -79,10 +101,15 @@ public class Init {
 
     public void initDirs() throws IOException {
         ArrayList<File> dirs = new ArrayList<>();
-        dirs.add(new File(this.pathBaseParent + "/buffer"));
-        dirs.add(new File(this.pathBaseParent + "/buffer/zipped"));
-        dirs.add(new File(this.pathBaseParent + "/db"));
-        dirs.add(new File(this.pathBaseParent + "/db/right_menu"));
+        dirs.add(new File(String.valueOf(this.pathToData)));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "fast_zipped"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "status"))));
 
         for (File dir : dirs) {
             if (!dir.exists()) {
@@ -91,12 +118,17 @@ public class Init {
         }
 
         ArrayList<File> files = new ArrayList<>();
-        files.add(new File(this.pathBaseParent + "/db/right_menu/total_shares.txt"));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "total_shares.txt"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg"))));
 
         for (File file : files) {
             if (!file.exists()) {
                 file.createNewFile();
             }
         }
+
+        Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg"), "" +
+            "{\"name\": \"FireSync\", \"port\": \"5432\", \"user\": \"fsync\", \"password\": \"\", \"host\": \"localhost\"}" +
+        "");
     }
 }

@@ -15,13 +15,15 @@ import java.util.Properties;
 
 public class UserStats {
     Path pathBaseParent;
+    Path pathToData;
 
     public UserStats() throws URISyntaxException {
         this.pathBaseParent = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+        this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
     }
 
     public void amountOfConnected() throws IOException, ParseException, SQLException {
-        GetDbInfo dbInfo = new GetDbInfo(this.pathBaseParent + "/cfg/db.cfg");
+        GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
         String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
