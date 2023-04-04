@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf85655f-05c9-4871-9efa-079732e63ec6" name="Changes" comment="" />
+    <list default="true" id="bf85655f-05c9-4871-9efa-079732e63ec6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../.idea/libraries/sigar_1_6_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/modernface/core/NetworkUsageChecker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js_vars.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../FireSync.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../FireSync.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Core.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Core.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Init.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Init.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Timeout.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Timeout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/tools/UserStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/tools/UserStats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/files/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/files/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/files/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/files/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/fs_web_server/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/fs_web_server/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/interface/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/interface/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/interface/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/interface/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/more_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/more_info.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,10 +40,14 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2N0DWJN4TlATnjzLJmOzRPAFSq9" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -34,7 +58,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/out/production/web-server/fs_web_server/static/js",
+    "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/src/web-server",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -50,6 +74,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/fs_web_server/templates/blocks" />
       <recent name="$PROJECT_DIR$/fs_web_server/static/js" />
       <recent name="$PROJECT_DIR$/fs_web_server/templates/interface" />
     </key>
@@ -63,7 +88,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/env/bin/python" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/fs_web_server/venv/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -112,7 +137,8 @@
       <option name="presentableId" value="Default" />
       <updated>1678792136006</updated>
       <workItem from="1678792137256" duration="41000" />
-      <workItem from="1678792192530" duration="70337000" />
+      <workItem from="1678792192530" duration="111127000" />
+      <workItem from="1680519201317" duration="2055000" />
     </task>
     <servers />
   </component>

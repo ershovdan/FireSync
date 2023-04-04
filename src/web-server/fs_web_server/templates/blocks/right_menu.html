@@ -1,6 +1,32 @@
 {% load static %}
 <div class="menu" style="background-color: #272b2f; height: 100vh;">
-    <div class="total_shares"><p id="total_shares"></p></div>
+    <div class="total_shares"><p id="total_shares" style="margin-bottom: 40px;"></p></div>
+
+    <div class="operating">
+        <p>NOW OPERATING</p>
+        <p id="operating_p"></p>
+    </div>
+
+    <div style="width: 90%; margin-left: 5%; margin-top: 20px;">
+        <p style="color: white; text-align: center; margin-bottom: 10px;">TOTAL UPLOAD USAGE</p>
+        <canvas id="upload_speed_canvas"></canvas>
+        <div class="choose_graph_network">
+            <div id="graph_network_5min"><p>5 min</p></div>
+            <div id="graph_network_15min"><p>15 min</p></div>
+            <div id="graph_network_30min"><p>30 min</p></div>
+            <div id="graph_network_60min"><p>1 h</p></div>
+        </div>
+    </div>
+
+    <div style="width: 90%; margin-left: 5%; margin-top: 20px;">
+        <p style="color: white; text-align: center; margin-bottom: 10px;">USING SHARES</p>
+        <canvas id="all_users_canvas"></canvas>
+        <div class="choose_graph_all_users">
+            <div id="all_users_5min"><p>5 min</p></div>
+            <div id="all_users_30min"><p>30 min</p></div>
+            <div id="all_users_60min"><p>1 h</p></div>
+        </div>
+    </div>
 
 </div>
 <style>
@@ -10,6 +36,52 @@
 
     .total_shares {
         color: white;
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .choose_graph_network {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .choose_graph_network div {
+        background-color: white;
+        width: 5vw;
+        padding: 4px;
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+    .choose_graph_network div:hover {
+        cursor: pointer;
+    }
+
+    .choose_graph_all_users {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .choose_graph_all_users div {
+        background-color: white;
+        width: 5vw;
+        padding: 4px;
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+    .choose_graph_all_users div:hover {
+        cursor: pointer;
+    }
+
+    .operating {
+        
     }
 </style>
 <script>

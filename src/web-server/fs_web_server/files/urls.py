@@ -5,5 +5,5 @@ from . import views
 app_name = "files"
 
 urlpatterns = [
-
+    path('', views.getFile),
 ]

@@ -11,4 +11,7 @@ urlpatterns = [
     path('list/more_info/', views.more_info),
     path('operations_get_data/', views.getData),
     path('preferences', views.preferences),
+    path('pause', views.pause),
+    path('set_pause', views.set_pause),
+    path('delete', views.delete),
 ]

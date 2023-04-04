@@ -2,15 +2,9 @@ package com.modernface.core;
 
 import com.modernface.tools.Compress;
 import com.modernface.tools.GetDbInfo;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.sqlite.core.DB;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -72,6 +66,7 @@ public class Init {
             "(\n" +
             "    \"time\" timestamp without time zone NOT NULL,\n" +
             "    amount integer,\n" +
+            "    id integer,\n" +
             "    CONSTRAINT \"Connected_pkey\" PRIMARY KEY (\"time\")\n" +
             ")"
         );
@@ -110,6 +105,7 @@ public class Init {
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "status"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts"))));
 
         for (File dir : dirs) {
             if (!dir.exists()) {
@@ -120,6 +116,9 @@ public class Init {
         ArrayList<File> files = new ArrayList<>();
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "total_shares.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage.txt"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage_final.txt"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts", "network_usage.sh"))));
 
         for (File file : files) {
             if (!file.exists()) {

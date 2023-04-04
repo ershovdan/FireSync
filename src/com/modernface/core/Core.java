@@ -1,10 +1,16 @@
 package com.modernface.core;
 
 import com.modernface.tools.Compress;
+import org.hyperic.sigar.NetInterfaceStat;
+import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarException;
+import org.hyperic.sigar.SigarProxy;
 import org.json.simple.parser.ParseException;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -24,5 +30,6 @@ class Core {
         Timeout tm = new Timeout(800, 10000);
         tm.start();
         tm.startLowFreq();
+        tm.startLowFreqNetworkUsage();
     }
 }

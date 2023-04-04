@@ -32,7 +32,17 @@ public class UserStats {
         props.setProperty("password", DBdata.get("password"));
         Connection conn = DriverManager.getConnection(url, props);
 
-        PreparedStatement st = conn.prepareStatement("INSERT INTO \"Connected\" (time, amount) VALUES (NOW(), 1);");
+        int total = 3;
+
+        PreparedStatement st = conn.prepareStatement("INSERT INTO \"Connected\" (time, amount, id) VALUES (NOW(), 1, 24);");
+        st.execute();
+        st.close();
+
+        st = conn.prepareStatement("INSERT INTO \"Connected\" (time, amount, id) VALUES (NOW(), 2, 25);");
+        st.execute();
+        st.close();
+
+        st = conn.prepareStatement("INSERT INTO \"Connected\" (time, amount, id) VALUES (NOW(), " + total + ", -1);");
         st.execute();
         st.close();
 

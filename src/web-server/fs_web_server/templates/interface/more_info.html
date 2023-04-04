@@ -24,6 +24,17 @@
                 </div>
             </div>
 
+            <div class="pause" id="pause">
+                <p id="pause_p">PAUSE</p>
+            </div>
+
+            <div class="delete" id="delete">
+                <p id="delete_p">DELETE</p>
+            </div>
+
+            <div class="delete_sure" id="delete_sure">
+                <p id="delete_sure_p">ARE YOU SURE?</p>
+            </div>
 
             <form style="color: white; grid-column-start: 2; grid-column-end: 2;  grid-row-start: 1; height: 80px;" method="POST">
                 {% csrf_token %}
@@ -104,6 +115,7 @@
         width: 90%;
         display: grid;
         grid-template-columns: 1fr 1fr;
+        column-gap: 50px;
     }
 
     .info_cont form input {
@@ -150,6 +162,66 @@
     .choose_graph div:hover {
         cursor: pointer;
     }
+    
+    .pause:hover {
+        cursor: pointer;
+    }
+
+    .pause {
+        grid-column-start: 2;
+        grid-row-start: 2; grid-row-end: 3;
+        width: 40%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 5px;
+        height: 50%;
+    }
+
+    .pause p {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .delete:hover {
+        cursor: pointer;
+    }
+
+    .delete {
+        grid-column-start: 2;
+        grid-row-start: 4; grid-row-end: 5;
+        width: 40%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 5px;
+        height: 50%;
+    }
+
+    .delete p {
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .delete_sure {
+        grid-column-start: 2;
+        grid-row-start: 5; grid-row-end: 6;
+        text-align: center;
+        color: white;
+        opacity: 0;
+        display: none;
+        width: 40%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 5px;
+        height: 50%;
+    }
 </style>
 <script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -185,16 +257,55 @@
         direction: 'normal',
     })
 
-    document.getElementById("new_name_button").onclick = function () {
-        document.getElementById("new_name_button").style.display = "none"
+    document.getElementById("pause").onclick = function () {
+        getData("set_pause")
+    }
 
-        anime({
-            targets: '.new_name',
-            translateX: 0,
-            easing: 'easeInOutQuad',
-            direction: 'normal',
-            duration: 1000
-        })
+    document.getElementById("delete").onclick = function () {
+        if (document.getElementById("delete_sure").style.display == "grid") {
+            getData("delete")
+            window.location.href="/list";
+        } else {
+            anime({
+                targets: '.delete',
+                backgroundColor: "#e33b37",
+                easing: 'easeInOutQuad',
+                direction: 'normal',
+                duration: 600
+            })
+
+            document.getElementById("delete_sure").style.display = "grid"
+
+            anime({
+                targets: '.delete_sure',
+                opacity: "1",
+                easing: 'easeInOutQuad',
+                direction: 'normal',
+                duration: 600,
+                delay: 100
+            })
+            {#getData("set_pause")#}
+        }
+
+        document.getElementById("new_name_button").onclick = function () {
+            document.getElementById("new_name_button").style.display = "none"
+
+            anime({
+                targets: '.new_name',
+                translateX: 0,
+                easing: 'easeInOutQuad',
+                direction: 'normal',
+                duration: 1000
+            })
+        }
+    }
+
+    function httpGet(theUrl)
+    {
+        var xmlHttp = new XMLHttpRequest()
+        xmlHttp.open("GET", theUrl, false)
+        xmlHttp.send( null )
+        return xmlHttp.responseText
     }
 
     let gr = {}
@@ -202,7 +313,7 @@
 
 
     let status
-    let total_shares
+    {% include "blocks/right_menu_js_vars.js" %}
 
 
     async function getData(check) {
@@ -220,9 +331,46 @@
             status = data
             return data
         }
+
+        if (check == "set_pause") {
+            let response = await fetch("/set_pause?id={{ main.id }}&key={{ main.key }}", {
+                method: 'get',
+                headers: {
+                    'X-Requested-Width': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                }
+            })
+        }
+
+        if (check == "delete") {
+            let response = await fetch("/delete?id={{ main.id }}&key={{ main.key }}", {
+                method: 'get',
+                headers: {
+                    'X-Requested-Width': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                }
+            })
+        }
+
+        let response = await fetch("/pause?id={{ main.id }}&key={{ main.key }}", {
+            method: 'get',
+            headers: {
+                'X-Requested-Width': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            }
+        })
+        let data = await response.json()
+        gr = data
+
+        if (gr["status"] == 2) {
+            document.getElementById("pause_p").innerHTML = "UNPAUSE"
+        } else {
+            document.getElementById("pause_p").innerHTML = "PAUSE"
+        }
+
         if (check == "graphConnected") {
             if (gr_min == 5) {
-                let response = await fetch("/operations_get_data?check=connected_users_5", {
+                let response = await fetch("/operations_get_data?check=connected_users_5&id={{ main.id }}", {
                     method: 'get',
                     headers: {
                         'X-Requested-Width': 'XMLHttpRequest',
@@ -242,7 +390,6 @@
                     data: {
                         labels: xValues,
                         datasets: [{
-                            {#backgroundColor: "rgba(0,0,255,1.0)",#}
                             borderColor: "rgb(255,255,255)",
                             data: yValues
                         }]
@@ -251,11 +398,18 @@
                         animation: {
                             duration: 0
                         },
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
                         legend: {
                             display: false
                         },
                         tooltips: {
                             enabled: false
+                        },
+                        elements: {
+                            point:{
+                                radius: 0
+                            }
                         },
                         scales: {
                             yAxes: [{
@@ -276,7 +430,7 @@
             }
         }
         if (gr_min == 30) {
-                let response = await fetch("/operations_get_data?check=connected_users_30", {
+                let response = await fetch("/operations_get_data?check=connected_users_30&id={{ main.id }}", {
                     method: 'get',
                     headers: {
                         'X-Requested-Width': 'XMLHttpRequest',
@@ -305,8 +459,15 @@
                         animation: {
                             duration: 0
                         },
+                        tooltips: {enabled: false},
+                        hover: {mode: null},
                         legend: {
                             display: false
+                        },
+                        elements: {
+                            point:{
+                                radius: 0
+                            }
                         },
                         tooltips: {
                             enabled: false
@@ -329,7 +490,7 @@
                 })
             }
             if (gr_min == 60) {
-                    let response = await fetch("/operations_get_data?check=connected_users_60", {
+                    let response = await fetch("/operations_get_data?check=connected_users_60&id={{ main.id }}", {
                         method: 'get',
                         headers: {
                             'X-Requested-Width': 'XMLHttpRequest',
@@ -361,8 +522,15 @@
                             legend: {
                                 display: false
                             },
+                            tooltips: {enabled: false},
+                            hover: {mode: null},
                             tooltips: {
                                 enabled: false
+                            },
+                            elements: {
+                                point:{
+                                    radius: 0
+                                }
                             },
                             scales: {
                                 yAxes: [{
@@ -450,9 +618,10 @@
                 document.getElementById("progress_cont").style.backgroundColor = "rgba(255,255,255,0.18)"
                 document.getElementById("progress_bar").style.backgroundColor = "FFFFFF"
                 document.getElementById("progress_bar_p").style.textAlign = "center"
-                document.getElementById("progress_bar").style.marginLeft = "20px"
 
                 let progress = httpGet("/static/db/right_menu/zip_progress/" + "{{ main.key }}" + "op" + "{{ main.id }}" + ".txt?q=" + (Math.random() * 100000).toString())
+
+                document.getElementById("progress_bar").style.width = "" + progress + "%"
 
                 if (progress.length <= 3) {
                     document.getElementById("progress_bar_p").innerHTML = "ZIPPING: " + progress + "%"
@@ -460,32 +629,10 @@
             }
 
 
+
+
             //right_menu
-            async function getDataRightMenu(check) {
-                if (check == "total_shares") {
-                    let response = await fetch("/operations_get_data?check=total_shares", {
-                        method: 'get',
-                        headers: {
-                            'X-Requested-Width': 'XMLHttpRequest',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-
-                    let data = await response.json()
-
-                    total_shares = data
-                    return data
-                }
-            }
-
-            getDataRightMenu("total_shares")
-
-            try {
-                let t_s = total_shares["answer"]
-                total_shares = t_s
-                document.getElementById("total_shares").innerHTML = "YOU HAVE " + total_shares + " ACTIVE SHARES"
-            } catch (error) {
-            }
+            {% include "blocks/right_menu_js.js" %}
 
 
             setTimeout(loop, 500)

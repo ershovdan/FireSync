@@ -7,11 +7,12 @@ import sqlite3
 import os
 import psycopg2
 import datetime
+import pathlib
 
 
 module_dir = pathlib.Path(os.path.dirname(__file__))
-db_cfg_path = os.path.join(module_dir.parent.parent.parent, 'cfg', 'db.cfg')
-
+data_path = os.path.join(pathlib.Path.home(), 'FireSyncData')
+db_cfg_path = os.path.join(data_path, 'cfg', 'db.cfg')
 
 right_menu_path = os.path.join(module_dir.parent.parent.parent, 'db', 'right_menu')
 
@@ -34,15 +35,13 @@ def add(request):
     except Exception:
         pass
 
-    with open(os.path.join(right_menu_path, "total_shares.txt"), "r") as file:
+    with open(os.path.join(data_path, 'db', 'right_menu', 'total_shares.txt'), "r") as file:
         total_shares = file.read()
 
     context = {"total_shares": total_shares}
 
     if request.method == "POST":
         cur.execute("INSERT INTO \"List\" (name, path, status) VALUES ('" + request.POST["name"] + "', '" + request.POST['path'] + "', 5);")
-
-        print(request.POST)
 
         conn.commit()
         conn.close()
@@ -113,6 +112,11 @@ def more_info(request):
 
 
 def getData(request):
+    try:
+        request.GET["check"] == " "
+    except:
+        return JsonResponse({"answer": "false"})
+
     with open(db_cfg_path, "r") as file:
         db_cfg_json = json.loads(file.read())
 
@@ -137,7 +141,9 @@ def getData(request):
         conn.close()
         return JsonResponse({"answer": str(count)})
     elif request.GET["check"] == "connected_users_5":
-        cur.execute('SELECT * FROM "Connected" ORDER BY "time" DESC LIMIT 30;')
+        share_id = request.GET["id"]
+
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + ' ORDER BY "time" DESC LIMIT 30;')
 
         time = []
         users = []
@@ -154,7 +160,9 @@ def getData(request):
         conn.close()
         return JsonResponse({"time": time, "users": users})
     elif request.GET["check"] == "connected_users_30":
-        cur.execute('SELECT * FROM "Connected" ORDER BY "time" DESC LIMIT 180;')
+        share_id = request.GET["id"]
+
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + ' ORDER BY "time" DESC LIMIT 180;')
 
         time = []
         users = []
@@ -170,8 +178,143 @@ def getData(request):
         conn.commit()
         conn.close()
         return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "network_5":
+        cur.execute('SELECT * FROM "Network" ORDER BY "time" DESC LIMIT 30;')
+
+        time = []
+        net = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            net.append(i[1])
+
+        time.reverse()
+        net.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "net": net})
+    elif request.GET["check"] == "network_15":
+        cur.execute('SELECT * FROM "Network" ORDER BY "time" DESC LIMIT 90;')
+
+        time = []
+        net = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            net.append(i[1])
+
+        time.reverse()
+        net.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "net": net})
+    elif request.GET["check"] == "network_30":
+        cur.execute('SELECT * FROM "Network" ORDER BY "time" DESC LIMIT 180;')
+
+        time = []
+        net = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            net.append(i[1])
+
+        time.reverse()
+        net.reverse()
+
+        time_final = []
+        net_final = []
+
+        for i in range(0, len(time), 2):
+            time_final.append(time[i])
+            net_final.append(net[i])
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time_final, "net": net_final})
+    elif request.GET["check"] == "network_60":
+        cur.execute('SELECT * FROM "Network" ORDER BY "time" DESC LIMIT 360;')
+
+        time = []
+        net = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            net.append(i[1])
+
+        time.reverse()
+        net.reverse()
+
+        time_final = []
+        net_final = []
+
+        for i in range(0, len(time), 4):
+            time_final.append(time[i])
+            net_final.append(net[i])
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time_final, "net": net_final})
     elif request.GET["check"] == "connected_users_60":
-        cur.execute('SELECT * FROM "Connected" ORDER BY "time" DESC LIMIT 360;')
+        share_id = request.GET["id"]
+
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + ' ORDER BY "time" DESC LIMIT 360;')
+
+        time = []
+        users = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            users.append(i[1])
+
+        time.reverse()
+        users.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "connected_users_all_5":
+        cur.execute('SELECT * FROM "Connected"  WHERE id = -1 ORDER BY "time" DESC LIMIT 30;')
+
+        time = []
+        users = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            users.append(i[1])
+
+        time.reverse()
+        users.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "connected_users_all_30":
+        cur.execute('SELECT * FROM "Connected"  WHERE id = -1 ORDER BY "time" DESC LIMIT 180;')
+
+        time = []
+        users = []
+
+        for i in cur.fetchall():
+            date = i[0]
+            time.append(date.strftime("%H:%M:%S"))
+            users.append(i[1])
+
+        time.reverse()
+        users.reverse()
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "connected_users_all_60":
+        cur.execute('SELECT * FROM "Connected"  WHERE id = -1 ORDER BY "time" DESC LIMIT 360;')
 
         time = []
         users = []
@@ -215,8 +358,6 @@ def preferences(request):
     with open(db_cfg_path, "r") as file:
         db_cfg_json = json.loads(file.read())
 
-    print(db_cfg_json)
-
     db_status = "true"
 
     try:
@@ -252,3 +393,95 @@ def preferences(request):
 
 
     return render(request, 'interface/preferences.html', context)
+
+
+def pause(request):
+    with open(db_cfg_path, "r") as file:
+        db_cfg_json = json.loads(file.read())
+
+    try:
+        conn = psycopg2.connect(database=db_cfg_json["name"],
+                                host=db_cfg_json["host"],
+                                user=db_cfg_json["user"],
+                                password=db_cfg_json["password"],
+                                port=db_cfg_json["port"])
+        cur = conn.cursor()
+    except Exception:
+        pass
+
+    id = request.GET["id"]
+    key = request.GET["key"]
+
+    cur.execute('SELECT * FROM "List" WHERE id=' + id + "AND key='" + key + "';")
+
+    status = 0
+    for i in cur.fetchall():
+        status = i[3]
+
+    conn.commit()
+    conn.close()
+    return JsonResponse({"status": status})
+
+
+def set_pause(request):
+    with open(db_cfg_path, "r") as file:
+        db_cfg_json = json.loads(file.read())
+
+    try:
+        conn = psycopg2.connect(database=db_cfg_json["name"],
+                                host=db_cfg_json["host"],
+                                user=db_cfg_json["user"],
+                                password=db_cfg_json["password"],
+                                port=db_cfg_json["port"])
+        cur = conn.cursor()
+    except Exception:
+        pass
+
+    id = request.GET["id"]
+    key = request.GET["key"]
+
+    cur.execute('SELECT * FROM "List" WHERE id=' + id + "AND key='" + key + "';")
+
+    status = 0
+    for i in cur.fetchall():
+        status = i[3]
+
+    if status == 2:
+        cur.execute('UPDATE "List" SET status = 1 WHERE id=' + id + "AND key='" + key + "';")
+    elif status == 1:
+        cur.execute('UPDATE "List" SET status = 2 WHERE id=' + id + "AND key='" + key + "';")
+
+    conn.commit()
+    conn.close()
+    return JsonResponse({"answer": ""})
+
+
+def delete(request):
+    with open(db_cfg_path, "r") as file:
+        db_cfg_json = json.loads(file.read())
+
+    try:
+        conn = psycopg2.connect(database=db_cfg_json["name"],
+                                host=db_cfg_json["host"],
+                                user=db_cfg_json["user"],
+                                password=db_cfg_json["password"],
+                                port=db_cfg_json["port"])
+        cur = conn.cursor()
+    except Exception:
+        pass
+
+    id = request.GET["id"]
+    key = request.GET["key"]
+
+    cur.execute('SELECT * FROM "List" WHERE id=' + id + "AND key='" + key + "';")
+
+    status = 0
+    for i in cur.fetchall():
+        status = i[3]
+
+    if status != 0:
+        cur.execute('UPDATE "List" SET status = 0 WHERE id=' + id + "AND key='" + key + "';")
+
+    conn.commit()
+    conn.close()
+    return JsonResponse({"answer": ""})
