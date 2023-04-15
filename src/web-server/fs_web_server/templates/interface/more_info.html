@@ -284,37 +284,22 @@
                 duration: 600,
                 delay: 100
             })
-            {#getData("set_pause")#}
-        }
-
-        document.getElementById("new_name_button").onclick = function () {
-            document.getElementById("new_name_button").style.display = "none"
-
-            anime({
-                targets: '.new_name',
-                translateX: 0,
-                easing: 'easeInOutQuad',
-                direction: 'normal',
-                duration: 1000
-            })
         }
     }
 
-    function httpGet(theUrl)
-    {
-        var xmlHttp = new XMLHttpRequest()
-        xmlHttp.open("GET", theUrl, false)
-        xmlHttp.send( null )
-        return xmlHttp.responseText
+    document.getElementById("new_name_button").onclick = function () {
+        document.getElementById("new_name_button").style.display = "none"
+
+        anime({
+            targets: '.new_name',
+            translateX: 0,
+            easing: 'easeInOutQuad',
+            direction: 'normal',
+            duration: 1000
+        })
     }
 
-    let gr = {}
-    let gr_min = 5
-
-
-    let status
     {% include "blocks/right_menu_js_vars.js" %}
-
 
     async function getData(check) {
         if (check == "status") {
@@ -628,12 +613,7 @@
                 }
             }
 
-
-
-
-            //right_menu
             {% include "blocks/right_menu_js.js" %}
-
 
             setTimeout(loop, 500)
     }

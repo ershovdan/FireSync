@@ -13,6 +13,7 @@ import pathlib
 module_dir = pathlib.Path(os.path.dirname(__file__))
 data_path = os.path.join(pathlib.Path.home(), 'FireSyncData')
 db_cfg_path = os.path.join(data_path, 'cfg', 'db.cfg')
+main_cfg_path = os.path.join(data_path, 'cfg', 'main.cfg')
 
 right_menu_path = os.path.join(module_dir.parent.parent.parent, 'db', 'right_menu')
 
@@ -128,7 +129,17 @@ def getData(request):
                                 port=db_cfg_json["port"])
         cur = conn.cursor()
     except Exception:
-        pass
+        for j in range(5):
+            conn = psycopg2.connect(database=db_cfg_json["name"],
+                                    host=db_cfg_json["host"],
+                                    user=db_cfg_json["user"],
+                                    password=db_cfg_json["password"],
+                                    port=db_cfg_json["port"])
+            try:
+                cur = conn.cursor()
+                break
+            except Exception:
+                pass
 
     if request.GET["check"] == "total_shares":
         cur.execute('SELECT * FROM "List" WHERE status > 0;')
@@ -330,6 +341,16 @@ def getData(request):
         conn.commit()
         conn.close()
         return JsonResponse({"time": time, "users": users})
+    elif request.GET["check"] == "now_operating":
+        cur.execute('SELECT value_str FROM "Other" WHERE type = ' + "'now_operating_total'" + ';')
+
+        name = ""
+        for i in cur.fetchall():
+            name = i[0]
+
+        conn.commit()
+        conn.close()
+        return JsonResponse({"answer": name})
 
     cur.execute('SELECT * FROM "List" WHERE id=' + request.GET["id"] + "AND key='" + request.GET["key"] +  "';")
 
@@ -355,6 +376,9 @@ def getData(request):
     return JsonResponse({"answer": "null"})
 
 def preferences(request):
+    with open(main_cfg_path, "r") as file:
+        main_cfg_json = json.loads(file.read())
+
     with open(db_cfg_path, "r") as file:
         db_cfg_json = json.loads(file.read())
 
@@ -370,7 +394,7 @@ def preferences(request):
     except Exception:
         db_status = "false"
 
-    context = {"db_data": db_cfg_json, "db_status": db_status}
+    context = {"db_data": db_cfg_json, "db_status": db_status, "main_data": main_cfg_json}
 
     if request.method == "POST":
         changedDB = {}
@@ -385,12 +409,21 @@ def preferences(request):
         if request.POST["db_password"] != db_cfg_json["password"]:
             changedDB["password"] = request.POST["db_password"]
 
+        changedMain = {}
+        if request.POST["webserver_port"] != db_cfg_json["web_server_port"]:
+            changedMain["web_server_port"] = request.POST["webserver_port"]
+
         for i in changedDB.keys():
             db_cfg_json[i] = changedDB[i]
+
+        for i in changedMain.keys():
+            main_cfg_json[i] = changedMain[i]
 
         with open(db_cfg_path, "w") as file:
             file.write(json.dumps(db_cfg_json))
 
+        with open(main_cfg_path, "w") as file:
+            file.write(json.dumps(main_cfg_json))
 
     return render(request, 'interface/preferences.html', context)
 

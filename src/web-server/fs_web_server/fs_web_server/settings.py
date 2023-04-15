@@ -1,4 +1,5 @@
 import os
+import pathlib
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -103,12 +104,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-print(os.path.join(BASE_DIR.parent.parent, "buffer", "zipped"))
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR.parent.parent, "buffer", "zipped"),
-    os.path.join(BASE_DIR.parent.parent)
+    os.path.join(pathlib.Path.home(), 'FireSyncData')
 )
 
 # Default primary key field type

@@ -83,6 +83,7 @@
     }
 </style>
 <script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     anime({
         targets: '.menu_add',
@@ -94,12 +95,13 @@
         direction: 'normal',
     })
 
+    {% include "blocks/right_menu_js_vars.js" %}
+
     function timer() {
-
-
-        setTimeout(timer, 50)
+        {% include "blocks/right_menu_js.js" %}
+        setTimeout(timer, 500)
     }
 
-    setTimeout(timer, 50)
+    timer()
 </script>
 

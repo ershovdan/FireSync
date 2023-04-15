@@ -1,6 +1,7 @@
 package com.modernface.core;
 
 import com.modernface.tools.Compress;
+import com.sun.jdi.connect.spi.Connection;
 import org.hyperic.sigar.NetInterfaceStat;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarException;
@@ -24,7 +25,7 @@ class Core {
         init.initDirs();
         init.initDB();
 
-        WebServerChecker ch = new WebServerChecker();
+        WebServerChecker ch = new WebServerChecker(null);
         ch.startWebServer();
 
         Timeout tm = new Timeout(800, 10000);

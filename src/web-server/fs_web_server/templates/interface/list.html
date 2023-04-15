@@ -68,6 +68,7 @@
     }
 </style>
 <script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     anime({
         targets: '.menu_list',
@@ -78,5 +79,14 @@
         easing: 'easeInOutQuad',
         direction: 'normal',
     })
+
+    {% include "blocks/right_menu_js_vars.js" %}
+
+    function loop() {
+        {% include "blocks/right_menu_js.js" %}
+        setTimeout(loop, 500)
+    }
+
+    loop()
 </script>
 

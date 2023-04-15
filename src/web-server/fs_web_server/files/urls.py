@@ -5,5 +5,6 @@ from . import views
 app_name = "files"
 
 urlpatterns = [
-    path('', views.getFile),
+    path('get_json/', views.getJsonFile),
+    path('get_file/', views.getFile),
 ]

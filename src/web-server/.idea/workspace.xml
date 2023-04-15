@@ -5,25 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf85655f-05c9-4871-9efa-079732e63ec6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../.idea/libraries/sigar_1_6_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../com/modernface/core/NetworkUsageChecker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js_vars.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../FireSync.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../FireSync.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Core.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Core.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/modernface/core/BufferChecker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/modernface/core/FileChangesChecker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../com/modernface/tools/GetMainInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../com/modernface/core/Init.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Init.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/SmallZipChecker.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../com/modernface/core/Timeout.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Timeout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/tools/UserStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/tools/UserStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/WebServerChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/WebServerChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/tools/Compress.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/tools/Compress.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/tools/UserStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/UserStatsChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../db/operations.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/files/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/files/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/files/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/files/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/fs_web_server/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/fs_web_server/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/interface/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/interface/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/fs_web_server/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/fs_web_server/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/interface/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/interface/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js.js" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js_vars.js" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js_vars.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/more_info.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/more_info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/preferences.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/preferences.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,13 +64,14 @@
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/src/web-server",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "IntelliLang.Configuration"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -138,11 +146,23 @@
       <updated>1678792136006</updated>
       <workItem from="1678792137256" duration="41000" />
       <workItem from="1678792192530" duration="111127000" />
-      <workItem from="1680519201317" duration="2055000" />
+      <workItem from="1680519201317" duration="6327000" />
+      <workItem from="1681213694235" duration="15232000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

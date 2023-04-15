@@ -1,4 +1,7 @@
 let total_shares
+let gr = {}
+let gr_min = 5
+let status
 
 let gr_net_min = 5
 document.getElementById("graph_network_5min").style.backgroundColor = "#c2c2c2"

@@ -52,16 +52,6 @@ public class Init {
         st.close();
 
         st = conn.prepareStatement("" +
-            "CREATE TABLE IF NOT EXISTS public.\"lastID\"\n" +
-            "(\n" +
-            "    \"lastID\" integer NOT NULL,\n" +
-            "    CONSTRAINT \"lastID_pkey\" PRIMARY KEY (\"lastID\")\n" +
-            ")\n"
-        );
-        st.execute();
-        st.close();
-
-        st = conn.prepareStatement("" +
             "CREATE TABLE IF NOT EXISTS public.\"Connected\"\n" +
             "(\n" +
             "    \"time\" timestamp without time zone NOT NULL,\n" +
@@ -74,18 +64,28 @@ public class Init {
         st.close();
 
         st = conn.prepareStatement("" +
-            "CREATE TABLE IF NOT EXISTS public.\"Files\"\n" +
+            "CREATE TABLE IF NOT EXISTS public.\"Other\"\n" +
             "(\n" +
-            "    in_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( CYCLE INCREMENT 1 START 0 MINVALUE 0 MAXVALUE 2147483647 CACHE 1 ),\n" +
-            "    id integer NOT NULL,\n" +
-            "    status integer,\n" +
-            "    path text COLLATE pg_catalog.\"default\",\n" +
-            "    out_key text COLLATE pg_catalog.\"default\",\n" +
-            "    CONSTRAINT \"Files_pkey\" PRIMARY KEY (in_id)\n" +
+            "    type text COLLATE pg_catalog.\"default\" NOT NULL,\n" +
+            "    value_int integer,\n" +
+            "    value_str text COLLATE pg_catalog.\"default\",\n" +
+            "    CONSTRAINT \"Other_pkey\" PRIMARY KEY (type)\n" +
             ")"
         );
         st.execute();
         st.close();
+
+        try {
+            st = conn.prepareStatement("INSERT INTO \"Other\" (type, value_int, value_str) VALUES ('active_shares', 0, '');");
+            st.execute();
+            st.close();
+        } catch (Exception exc) {}
+
+        try {
+            st = conn.prepareStatement("INSERT INTO \"Other\" (type, value_int, value_str) VALUES ('now_operating_total', 0, '');");
+            st.execute();
+            st.close();
+        } catch (Exception exc) {}
 
         st = conn.prepareStatement("DELETE FROM \"Connected\" WHERE amount > -1;");
         st.execute();
@@ -99,7 +99,6 @@ public class Init {
         dirs.add(new File(String.valueOf(this.pathToData)));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped"))));
-        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "fast_zipped"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg"))));
@@ -116,6 +115,7 @@ public class Init {
         ArrayList<File> files = new ArrayList<>();
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "total_shares.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "main.cfg"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage_final.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts", "network_usage.sh"))));
@@ -126,8 +126,21 @@ public class Init {
             }
         }
 
-        Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg"), "" +
-            "{\"name\": \"FireSync\", \"port\": \"5432\", \"user\": \"fsync\", \"password\": \"\", \"host\": \"localhost\"}" +
-        "");
+        if (Files.readString(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg")).equals("")) {
+            Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg"), "" +
+                "{\"name\": \"FireSync\", \"port\": \"5432\", \"user\": \"fsync\", \"password\": \"\", \"host\": \"localhost\"}" +
+            "");
+        }
+
+        if (Files.readString(Paths.get(String.valueOf(pathToData), "cfg", "main.cfg")).equals("")) {
+            Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "main.cfg"), "" +
+                "{\"web_server_port\": \"8000\"}" +
+            "");
+        }
+
+        if (!(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "web_server"))).exists())) {
+
+        }
+
     }
 }

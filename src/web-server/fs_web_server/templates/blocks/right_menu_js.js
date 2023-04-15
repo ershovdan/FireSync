@@ -1,19 +1,27 @@
 async function getDataRightMenu(check) {
     if (check == "total_shares") {
-            let response = await fetch("/operations_get_data?check=total_shares", {
-                method: 'get',
-                headers: {
-                    'X-Requested-Width': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                }
-            })
+        let response = await fetch("/operations_get_data?check=total_shares", {
+            method: 'get',
+            headers: {
+                'X-Requested-Width': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            }
+        })
 
-            let data = await response.json()
+        let data = await response.json()
 
-            total_shares = data
-            return data
-        }
+        total_shares = data
+        return data
     }
+}
+
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest()
+    xmlHttp.open("GET", theUrl, false)
+    xmlHttp.send( null )
+    return xmlHttp.responseText
+}
 
 getDataRightMenu("total_shares")
 
@@ -73,6 +81,23 @@ document.getElementById("all_users_60min").onclick = function () {
 }
 
 async function rmenu_async() {
+    let response = await fetch("/operations_get_data?check=now_operating", {
+        method: 'get',
+        headers: {
+            'X-Requested-Width': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+        }
+    })
+
+    let data = await response.json()
+
+    gr = data
+    if (gr["answer"] != "") {
+        document.getElementById("operating_p").innerHTML = gr["answer"]
+    } else {
+        document.getElementById("operating_p").innerHTML = "NOTHING"
+    }
+
     if (gr_net_min == 5) {
         let response = await fetch("/operations_get_data?check=network_5", {
             method: 'get',
@@ -100,8 +125,6 @@ async function rmenu_async() {
         } else {
             axisNameY = "Kbps"
         }
-
-
 
         new Chart("upload_speed_canvas", {
             type: "line",

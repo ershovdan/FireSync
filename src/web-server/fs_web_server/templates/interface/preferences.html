@@ -12,6 +12,11 @@
         <section class="sec1_sec">
             <div class="general_setting">
                 <h2>GENERAL SETTINGS</h2>
+                <form class="general_from" method="POST">
+                    {% csrf_token %}
+                    <p style="grid-column-start: 1; grid-column-end: 4; grid-row-start: 1; grid-row-end: 1;">WEBSERVER PORT</p>
+                    <input type="number" class="webserver_port" id="webserver_port" name="webserver_port" value="{{ main_data.web_server_port }}" style="grid-column-start: 1; grid-column-end: 3; grid-row-start: 2; grid-row-end: 2;" minlength="1">
+                </form>
             </div>
             <div class="db_setting">
                 <h2>DB SETTINGS</h2>
@@ -139,8 +144,35 @@
         font-family: Roboto, sans-serif;
         font-weight: bold;
     }
+
+    .general_from {
+        width: 70%;
+        margin-left: 15%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        column-gap: 20px;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        row-gap: 14px;
+        margin-top: 20px;
+    }
+
+    .general_from input {
+        border: none;
+        outline: none;
+        font-family: Roboto, sans-serif;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .general_from p {
+        color: white;
+        font-family: Roboto, sans-serif;
+        line-height: 1.5em;
+        margin-top: 10px;
+    }
 </style>
 <script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     anime({
         targets: '.menu_preferences',
@@ -151,6 +183,8 @@
         easing: 'easeInOutQuad',
         direction: 'normal',
     })
+
+    {% include "blocks/right_menu_js_vars.js" %}
 
     function loop() {
         let message = []
@@ -170,8 +204,9 @@
         if (document.getElementById("db_port").value !=  "{{ db_data.port }}") {
             message.push("DB port")
         }
-
-        console.log(message)
+        if (document.getElementById("webserver_port").value !=  "{{ main_data.web_server_port }}") {
+            message.push("WEBSERVER address")
+        }
 
         let final_message = "You're going to change: "
 
@@ -182,8 +217,6 @@
                 final_message += message.at(0) + ", "
             }
         }
-
-        console.log(final_message)
 
         if (final_message == "You're going to change: ") {
             document.getElementById("message").style.color = "white"
@@ -201,7 +234,9 @@
             document.getElementById("db_status_p").innerHTML = "CONNECTED"
         }
 
-        setTimeout(loop, 100)
+        {% include "blocks/right_menu_js.js" %}
+
+        setTimeout(loop, 500)
     }
 
     loop()

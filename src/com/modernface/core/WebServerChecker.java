@@ -2,130 +2,83 @@ package com.modernface.core;
 
 import com.modernface.tools.Compress;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.*;
 
 import com.modernface.tools.GetDbInfo;
-import org.json.simple.JSONObject;
+import com.modernface.tools.GetMainInfo;
 import org.json.simple.parser.ParseException;
-import org.postgresql.util.PSQLException;
-import org.sqlite.SQLiteException;
 
 public class WebServerChecker {
-    Path pathBase;
-    Path pathBaseParent;
     Path pathToData;
+    Connection conn;
 
-    public WebServerChecker() throws URISyntaxException, SQLException {
-        this.pathBase = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-        this.pathBaseParent = Paths.get(Compress.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+    public WebServerChecker(Connection con) throws URISyntaxException, SQLException {
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
+        this.conn = con;
     }
 
+    public void forRightMenu() throws IOException, SQLException, ParseException {
+        GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
+        HashMap<String, String> DBdata = dbInfo.getCFG();
 
-    public void forRightMenu() throws IOException, SQLException {
-        String url = "jdbc:sqlite:" + this.pathBaseParent + "/db/operations.db";
-        Connection con = DriverManager.getConnection(url);
-        Statement stmt = con.createStatement();
-
-        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM List WHERE status > 0;");
-        Files.writeString(Paths.get(this.pathBaseParent + "/db/right_menu/total_shares.txt"), String.valueOf(rs.getInt(1)));
-
-        rs = stmt.executeQuery("SELECT * FROM List WHERE status > 0;");
-
-        while (rs.next()) {
-            File file = new File(this.pathBaseParent + "/db/right_menu/status/" + rs.getString("key") + "op" + rs.getInt("id") + ".txt");
-            try {
-                Files.delete(Path.of(this.pathBaseParent + "/db/right_menu/status/" + rs.getString("key") + "op" + rs.getInt("id") + ".txt"));
-            } catch (Exception exc) {}
-            
-            file.createNewFile();
-            Files.writeString(Path.of(this.pathBaseParent + "/db/right_menu/status/" + rs.getString("key") + "op" + rs.getInt("id") + ".txt"), String.valueOf(rs.getInt("status")));
-
-        }
-
-        con.close();
+        Statement st = this.conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM \"Files\" WHERE status > 0;");
+        int active_shares = rs.getInt(1);
+        PreparedStatement pst = this.conn.prepareStatement("UPDATE \"Other\" SET value_int = " + active_shares + " WHERE type = 'active_shares';");
+        pst.execute();
+        st.close();
     }
 
-    public void startWebServer() throws IOException, InterruptedException {
-        String cmd = "lsof -t -i tcp:8000 | xargs kill -9";
+    public void startWebServer() throws IOException, InterruptedException, ParseException {
+        GetMainInfo getMainInfo = new GetMainInfo();
+
+        String cmd = "lsof -t -i tcp:" + getMainInfo.getCFG("web_server_port") + "  | xargs kill -9";
         Runtime run = Runtime.getRuntime();
         Process pr = run.exec(cmd);
 
-        cmd = this.pathBaseParent + "/web-server/env/bin/python " + this.pathBaseParent + "web-server/fs_web_server/manage.py runserver";
+        cmd = this.pathToData + "/web_server/env/bin/python " + this.pathToData + "/web_server/fs_web_server/manage.py runserver 0.0.0.0:" + getMainInfo.getCFG("web_server_port");
         run = Runtime.getRuntime();
         pr = run.exec(cmd);
     }
 
     public void checkList() throws SQLException, URISyntaxException, IOException, ParseException {
-        GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
-        HashMap<String, String> DBdata = dbInfo.getCFG();
+        Statement st = this.conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM \"List\" WHERE status = 5;");
 
-        String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
-        Properties props = new Properties();
-        props.setProperty("user", DBdata.get("user"));
-        props.setProperty("password", DBdata.get("password"));
-        Connection conn = DriverManager.getConnection(url, props);
-
-        int lastID = 0;
-
-        Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT \"lastID\" FROM \"lastID\";");
         while (rs.next()) {
-            lastID = rs.getInt("lastID");
-        }
-        rs.close();
-        st.close();
+            String path = rs.getString("path");
+            int id = rs.getInt("id");
 
-        HashMap<String, String> namesForZip = new HashMap<>();
-        ArrayList<Integer> indexes = new ArrayList<>();
+            Random ran = new Random();
+            String key = Integer.toHexString(ran.nextInt(2147483647)) + Integer.toHexString(ran.nextInt(2147483647));
+            key = "0".repeat(16 - key.length()) + key;
 
-        int id;
+            st = this.conn.createStatement();
+            st.executeUpdate("UPDATE \"List\" SET \"key\" = '" + key + "' WHERE \"id\" = " + id + ";");
+            st.close();
 
-        st = conn.createStatement();
-        rs = st.executeQuery("SELECT * FROM public.\"List\";");
-        try {
-            while (rs.next()) {
-                id = rs.getInt("id");
-                if (id > lastID) {
-                    String path = rs.getString("path");
-                    int newID = lastID + 1;
-                    if (newID > lastID) {
-                        Statement pst = conn.createStatement();
-                        pst.executeUpdate("UPDATE \"lastID\" SET \"lastID\" = " + id + " WHERE \"lastID\" = " + lastID + ";");
-                        pst.close();
-                    }
-
-                    Random ran = new Random();
-                    String key = Integer.toHexString(ran.nextInt(2147483647)) + Integer.toHexString(ran.nextInt(2147483647));
-                    key = "0".repeat(16 - key.length()) + key;
-
-                    Statement pst = conn.createStatement();
-                    st.executeUpdate("UPDATE \"List\" SET \"key\" = '" + key + "' WHERE \"id\" = " + id + ";");
-                    pst.close();
-
-                    namesForZip.put(key, path);
-                    indexes.add(id);
-                }
+            String name = key + "op" + id;
+            File dir = new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", name)));
+            if (!dir.exists()) {
+                dir.mkdir();
             }
-        } catch (PSQLException exc) {}
-        rs.close();
-        st.close();
-        conn.close();
+            File file = new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", name  + ".json")));
+            if(!file.exists()) {
+                file.createNewFile();
+            }
 
-        int counter = 0;
-        for (Map.Entry<String, String> zipName : namesForZip.entrySet()) {
-            Compress compress = new Compress(zipName.getValue(), zipName.getKey());
-            compress.zipAll("op" + indexes.get(counter));
-            counter++;
+            Compress compress = new Compress(path, key, id);
+            compress.initJSON(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", name  + ".json")));
+
+            st = this.conn.createStatement();
+            st.executeUpdate("UPDATE \"List\" SET \"status\" = 4 WHERE \"id\" = " + id + ";");
+            st.close();
         }
     }
 }

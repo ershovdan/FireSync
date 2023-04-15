@@ -1,10 +1,10 @@
 {% load static %}
 <div class="menu" style="background-color: #272b2f; height: 100vh;">
-    <div class="total_shares"><p id="total_shares" style="margin-bottom: 40px;"></p></div>
+    <div class="total_shares"><p id="total_shares" style="margin-bottom: 40px;">YOU HAVE   ACTIVE SHARES</p></div>
 
     <div class="operating">
         <p>NOW OPERATING</p>
-        <p id="operating_p"></p>
+        <p id="operating_p" style="margin-top: 20px;">NOTHING</p>
     </div>
 
     <div style="width: 90%; margin-left: 5%; margin-top: 20px;">
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div style="width: 90%; margin-left: 5%; margin-top: 20px;">
+    <div style="width: 90%; margin-left: 5%; margin-top: 50px;">
         <p style="color: white; text-align: center; margin-bottom: 10px;">USING SHARES</p>
         <canvas id="all_users_canvas"></canvas>
         <div class="choose_graph_all_users">
@@ -81,7 +81,16 @@
     }
 
     .operating {
-        
+        color: black;
+        font-family: Roboto, sans-serif;
+        text-align: center;
+        background-color: white;
+        width: 80%;
+        font-weight: bold;
+        margin-left: 10%;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 30px;
     }
 </style>
 <script>
