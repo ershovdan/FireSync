@@ -154,7 +154,7 @@ def getData(request):
     elif request.GET["check"] == "connected_users_5":
         share_id = request.GET["id"]
 
-        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + ' ORDER BY "time" DESC LIMIT 30;')
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + " AND time > NOW() - INTERVAL '5 minutes';")
 
         time = []
         users = []
@@ -164,8 +164,10 @@ def getData(request):
             time.append(date.strftime("%H:%M:%S"))
             users.append(i[1])
 
+
         time.reverse()
         users.reverse()
+
 
         conn.commit()
         conn.close()
@@ -173,7 +175,7 @@ def getData(request):
     elif request.GET["check"] == "connected_users_30":
         share_id = request.GET["id"]
 
-        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + ' ORDER BY "time" DESC LIMIT 180;')
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + " AND time > NOW() - INTERVAL '30 minutes';")
 
         time = []
         users = []
@@ -274,7 +276,7 @@ def getData(request):
     elif request.GET["check"] == "connected_users_60":
         share_id = request.GET["id"]
 
-        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + ' ORDER BY "time" DESC LIMIT 360;')
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + share_id + " AND time > NOW() - INTERVAL '60 minutes';")
 
         time = []
         users = []
@@ -291,7 +293,7 @@ def getData(request):
         conn.close()
         return JsonResponse({"time": time, "users": users})
     elif request.GET["check"] == "connected_users_all_5":
-        cur.execute('SELECT * FROM "Connected"  WHERE id = -1 ORDER BY "time" DESC LIMIT 30;')
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + "-1" + " AND time > NOW() - INTERVAL '5 minutes';")
 
         time = []
         users = []
@@ -308,7 +310,7 @@ def getData(request):
         conn.close()
         return JsonResponse({"time": time, "users": users})
     elif request.GET["check"] == "connected_users_all_30":
-        cur.execute('SELECT * FROM "Connected"  WHERE id = -1 ORDER BY "time" DESC LIMIT 180;')
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + "-1" + " AND time > NOW() - INTERVAL '30 minutes';")
 
         time = []
         users = []
@@ -325,7 +327,7 @@ def getData(request):
         conn.close()
         return JsonResponse({"time": time, "users": users})
     elif request.GET["check"] == "connected_users_all_60":
-        cur.execute('SELECT * FROM "Connected"  WHERE id = -1 ORDER BY "time" DESC LIMIT 360;')
+        cur.execute('SELECT * FROM "Connected" WHERE id = ' + "-1" + " AND time > NOW() - INTERVAL '60 minutes';")
 
         time = []
         users = []

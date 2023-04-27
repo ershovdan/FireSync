@@ -5,27 +5,111 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf85655f-05c9-4871-9efa-079732e63ec6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../com/modernface/core/BufferChecker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../com/modernface/core/FileChangesChecker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../com/modernface/tools/GetMainInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Init.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Init.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/core/SmallZipChecker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Timeout.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Timeout.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fs_web_server/static/img/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/NetworkUsageChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/NetworkUsageChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../com/modernface/core/UserStatsChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/UserStatsChecker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../com/modernface/core/WebServerChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/WebServerChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/tools/Compress.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/tools/Compress.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/tools/UserStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/UserStatsChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../db/operations.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/files/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/files/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/files/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/files/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/fs_web_server/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/fs_web_server/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/interface/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/interface/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/CNAME" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/bower.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/build.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/css/anime-theme.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/css/animejs.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/css/documentation.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/css/website.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-Bold.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-Bold.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-BoldItalic.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-BoldItalic.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-Italic.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-Italic.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-Regular.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/InputMono-Regular.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/Roobert-Regular.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/Roobert-Regular.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/Roobert-SemiBold.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/Roobert-SemiBold.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/Roobert-SemiBoldItalic.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/fonts/Roobert-SemiBoldItalic.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/anime-mini-logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/animejs-v3-header-animation.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/animejs-v3-logo-animation.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/animejs-v3-release.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/apple-touch-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-codepen.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-css.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-docs.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-documentation.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-download.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-easing-cubic.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-easing-elastic.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-easing-spring.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-easing-steps.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-examples.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-github.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-html.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-js.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-staggering-center.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-staggering-easing.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-staggering-forward.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-staggering-grid.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-staggering-index.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-staggering-reverse.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-svg.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/icons/icon-twitter.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/img/social-media-image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime.player.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.1.0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.1.3.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.2.0.0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.2.0.1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.2.0.2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.2.1.0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.2.2.0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/anime/anime.3.0.0-alpha.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/documentation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/vendors/beautify-html.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/vendors/highlight.pack.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/vendors/stats.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/assets/js/website.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/DOM-stress-test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/advanced-staggering-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/advanced-staggering.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/animejs-mgs-logo-animation.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/animejs-v2-logo-animation.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/animejs-v3-logo-animation.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/built-in-easings.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/callbacks.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/colors-test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/complex-properties.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/directions-testing.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/ease-visualizer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/follow-scroll.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/keyframes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/layered-animations.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/speed-test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/stagger-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/stagger-grid-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/stagger-tests.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/staggered-animations.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/staggered-easing-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/svg-lines-animations.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/svg-path-animation-responsive.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/svg-path-animation.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/time-control.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/timeline.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/examples/transforms-demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/documentation/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/lib/anime.es.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/lib/anime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/lib/anime.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/static/js/anime-master/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/menu.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js.js" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js_vars.js" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/blocks/right_menu_js_vars.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/add.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/list.html" afterDir="false" />
@@ -66,7 +150,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/src/web-server",
+    "last_opened_file_path": "/Users/ershovdan/Programming/FireSync/src/web-server/fs_web_server/static/img",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -82,6 +166,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/fs_web_server/static/img" />
       <recent name="$PROJECT_DIR$/fs_web_server/templates/blocks" />
       <recent name="$PROJECT_DIR$/fs_web_server/static/js" />
       <recent name="$PROJECT_DIR$/fs_web_server/templates/interface" />
@@ -147,7 +232,7 @@
       <workItem from="1678792137256" duration="41000" />
       <workItem from="1678792192530" duration="111127000" />
       <workItem from="1680519201317" duration="6327000" />
-      <workItem from="1681213694235" duration="15232000" />
+      <workItem from="1681213694235" duration="29818000" />
     </task>
     <servers />
   </component>

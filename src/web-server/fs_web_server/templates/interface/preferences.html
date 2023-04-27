@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
     <title>Preferences</title>
 </head>
 <body>
@@ -171,7 +172,7 @@
         margin-top: 10px;
     }
 </style>
-<script src="{% static 'js/anime-master/lib/anime.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
     anime({
@@ -179,7 +180,7 @@
         height: '60px',
         lineHeight: '60px',
         backgroundColor: '#e33b37',
-        boxShadow: "inset 0px 0px 10px -3px rgba(0,0,0,0.1)",
+        boxShadow: "inset 0px 0px 10px -3px rgba(0 ,0,0,0.1)",
         easing: 'easeInOutQuad',
         direction: 'normal',
     })

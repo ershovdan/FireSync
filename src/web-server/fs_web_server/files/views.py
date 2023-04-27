@@ -69,7 +69,6 @@ def getFile(request):
 
     length = 0
     for i in cur.fetchall():
-        print(i)
         length += 1
 
     if length == 0:
@@ -77,6 +76,8 @@ def getFile(request):
 
     if not (os.path.exists(os.path.join(pathlib.Path.home(), 'FireSyncData', 'buffer', 'zipped', str(key) + "op" + str(id), file_id + ".zip"))):
         return JsonResponse({"answer": "false"})
+
+    cur.execute('INSERT INTO "Connected" (time, id) VALUES (NOW(), ' + str(id) + ');')
 
     conn.commit()
     conn.close()

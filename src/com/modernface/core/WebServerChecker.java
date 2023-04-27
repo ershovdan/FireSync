@@ -28,7 +28,7 @@ public class WebServerChecker {
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
         Statement st = this.conn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM \"Files\" WHERE status > 0;");
+        ResultSet rs = st.executeQuery("SELECT COUNT(*) FROM \"List\" WHERE status > 0;");
         int active_shares = rs.getInt(1);
         PreparedStatement pst = this.conn.prepareStatement("UPDATE \"Other\" SET value_int = " + active_shares + " WHERE type = 'active_shares';");
         pst.execute();
@@ -43,6 +43,7 @@ public class WebServerChecker {
         Process pr = run.exec(cmd);
 
         cmd = this.pathToData + "/web_server/env/bin/python " + this.pathToData + "/web_server/fs_web_server/manage.py runserver 0.0.0.0:" + getMainInfo.getCFG("web_server_port");
+
         run = Runtime.getRuntime();
         pr = run.exec(cmd);
     }

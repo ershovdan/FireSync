@@ -8,10 +8,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -27,22 +25,38 @@ public class UserStatsChecker {
     }
 
     public void amountOfConnected() throws IOException, ParseException, SQLException {
-        int total = 3;
+        Statement st = this.conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT id FROM \"List\";");
 
-        PreparedStatement st = this.conn.prepareStatement("INSERT INTO \"Connected\" (time, amount, id) VALUES (NOW(), 1, 24);");
-        st.execute();
-        st.close();
+        int total_amount = 0;
+        while (rs.next()) {
+            int id = rs.getInt("id");
 
-        st = this.conn.prepareStatement("INSERT INTO \"Connected\" (time, amount, id) VALUES (NOW(), 2, 25);");
-        st.execute();
-        st.close();
+            Statement st2 = this.conn.createStatement();
+            ResultSet rs2 = st2.executeQuery("SELECT COUNT(*) FROM \"ConnectedBuffer\" WHERE id = " + id + " AND time > NOW() - INTERVAL '10 SECONDS';");
 
-        st = this.conn.prepareStatement("INSERT INTO \"Connected\" (time, amount, id) VALUES (NOW(), " + total + ", -1);");
-        st.execute();
-        st.close();
+            int amount = 0;
+            while (rs2.next()) {
+                amount = rs2.getInt(1);
+            }
 
-        st = this.conn.prepareStatement("DELETE FROM \"Connected\" WHERE time < UNIX_TIMESTAMP(DATE_SUB(NOW() - INTERVAL '1 DAY'))");
-        st.execute();
-        st.close();
+            PreparedStatement pst2 = conn.prepareStatement("INSERT INTO \"Connected\" (time, id, amount) VALUES (NOW(), " + id + ", " + amount + ");");
+            pst2.execute();
+            pst2.close();
+
+            total_amount += amount;
+        }
+
+        PreparedStatement pst2 = conn.prepareStatement("INSERT INTO \"Connected\" (time, id, amount) VALUES (NOW(), " + "-1" + ", " + total_amount + ");");
+        pst2.execute();
+        pst2.close();
+
+        PreparedStatement pst = this.conn.prepareStatement("DELETE FROM \"ConnectedBuffer\" WHERE id > -1;");
+        pst.execute();
+        pst.close();
+
+        pst = this.conn.prepareStatement("DELETE FROM \"Connected\" WHERE time < NOW() - INTERVAL '120 MINUTES'");
+        pst.execute();
+        pst.close();
     }
 }

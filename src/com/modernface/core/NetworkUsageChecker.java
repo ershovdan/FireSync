@@ -1,5 +1,8 @@
 package com.modernface.core;
 
+import com.modernface.tools.GetMainInfo;
+import org.json.simple.parser.ParseException;
+
 import javax.sound.midi.Soundbank;
 import java.io.File;
 import java.io.IOException;
@@ -50,8 +53,18 @@ public class NetworkUsageChecker {
         return (int) data;
     }
 
-    public void check() throws IOException {
-        ProcessBuilder pr = new ProcessBuilder("sh", "/Users/ershovdan/FireSyncData/a.sh");
+    private void updateShellFile() throws IOException, ParseException {
+        GetMainInfo getMainInfo = new GetMainInfo();
+
+        String command = "iftop -i en0 -P -t -s10 -f \"src port " + getMainInfo.getCFG("web_server_port") + "\" 2> /dev/null| grep \"Total send rate:\" > " + Paths.get(this.pathToData.toString(), "db", "network_usage.txt");
+
+        Files.writeString(Paths.get(String.valueOf(Paths.get(this.pathToData.toString(), "scripts", "network_usage.sh"))), command);
+    }
+
+    public void check() throws IOException, ParseException {
+        this.updateShellFile();
+
+        ProcessBuilder pr = new ProcessBuilder("sh", Paths.get(this.pathToData.toString(), "scripts", "network_usage.sh").toString());
         Process p = pr.start();
 
         String str = Files.readString(Paths.get(String.valueOf(this.pathToData), "db", "network_usage.txt"));
