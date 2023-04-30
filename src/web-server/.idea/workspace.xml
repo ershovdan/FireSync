@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf85655f-05c9-4871-9efa-079732e63ec6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../Starter/Starter.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Starter/src/Starter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Core.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Core.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../com/modernface/core/Init.java" beforeDir="false" afterPath="$PROJECT_DIR$/../com/modernface/core/Init.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fs_web_server/templates/interface/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/fs_web_server/templates/interface/home.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +123,7 @@
       <workItem from="1678792137256" duration="41000" />
       <workItem from="1678792192530" duration="111127000" />
       <workItem from="1680519201317" duration="6327000" />
-      <workItem from="1681213694235" duration="39798000" />
+      <workItem from="1681213694235" duration="40255000" />
     </task>
     <servers />
   </component>

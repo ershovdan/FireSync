@@ -1,1 +1,4 @@
-/out/
+out/
+.idea
+FireSync.iml
+.DS_Store
