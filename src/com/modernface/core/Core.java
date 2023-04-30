@@ -25,12 +25,18 @@ class Core {
         init.initDirs();
         init.initDB();
 
-        WebServerChecker ch = new WebServerChecker(null);
-        ch.startWebServer();
+        if (args.length == 0) {
+            WebServerChecker ch = new WebServerChecker(null);
+            ch.startWebServer();
 
-        Timeout tm = new Timeout(800, 10000);
-        tm.start();
-        tm.startLowFreq();
-        tm.startLowFreqNetworkUsage();
+            Timeout tm = new Timeout(800, 10000);
+            tm.start();
+            tm.startLowFreq();
+            tm.startLowFreqNetworkUsage();
+        } else {
+            if (args[0].equals("--nogui")) {
+
+            }
+        }
     }
 }

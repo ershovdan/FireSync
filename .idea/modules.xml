@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FireSync.iml" filepath="$PROJECT_DIR$/FireSync.iml" />
       <module fileurl="file://$USER_HOME$/FireSyncData/FireSyncData.iml" filepath="$USER_HOME$/FireSyncData/FireSyncData.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Starter/Starter.iml" filepath="$PROJECT_DIR$/Starter/Starter.iml" />
     </modules>
   </component>
 </project>

@@ -75,6 +75,28 @@ public class Init {
         st.execute();
         st.close();
 
+        st = conn.prepareStatement("" +
+            "CREATE TABLE IF NOT EXISTS public.\"ConnectedBuffer\"\n" +
+            "(\n" +
+            "    \"time\" timestamp without time zone,\n" +
+            "    id integer NOT NULL,\n" +
+            "    CONSTRAINT \"ConnectedBuffer_pkey\" PRIMARY KEY (id)\n" +
+            ")"
+        );
+        st.execute();
+        st.close();
+
+        st = conn.prepareStatement("" +
+            "CREATE TABLE IF NOT EXISTS public.\"Network\"\n" +
+            "(\n" +
+            "    \"time\" timestamp without time zone NOT NULL,\n" +
+            "    data integer,\n" +
+            "    CONSTRAINT \"Network_pkey\" PRIMARY KEY (\"time\")\n" +
+            ")"
+        );
+        st.execute();
+        st.close();
+
         try {
             st = conn.prepareStatement("INSERT INTO \"Other\" (type, value_int, value_str) VALUES ('active_shares', 0, '');");
             st.execute();
