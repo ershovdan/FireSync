@@ -1,0 +1,33 @@
+{% load static %}
+<menu class="menu" style="position: fixed; height: 60px; width: calc(100vw / 3 * 2); display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;">
+
+    <a href="/src/main/web-server/fs_web_server/static"><div class="menu_home" id="menu_home" style="grid-column-start: 1; grid-column-end: 1;"><p>HOME</p></div></a>
+    <a href="/list"><div class="menu_list" id="menu_list" style="grid-column-start: 1; grid-column-end: 1;"><p>LIST</p></div></a>
+    <a href="/add"><div class="menu_add" id="menu_add" style="grid-column-start: 1; grid-column-end: 1;"><p>ADD</p></div></a>
+    <a href="/preferences"><div class="menu_preferences" id="menu_preferences" style="grid-column-start: 4; grid-column-end: 4;"><p>PREFERENCES</p></div></a>
+</menu>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<style>
+    .menu a {
+        text-decoration: none;
+        color: white;
+        text-align: center;
+        font-family: Roboto, sans-serif;
+        font-weight: bold;
+        line-height: 50px;
+    }
+
+    .menu a div:hover {
+        background-color: #e33b37;
+        transition: .5s;
+    }
+
+    .menu a div {
+        height: 50px;
+        background-color: #FE413C;
+    }
+</style>
+
+
