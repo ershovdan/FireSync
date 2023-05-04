@@ -7,17 +7,44 @@ Works on Linux, MacOS.
 
 ---
 ## Installation
-To make your FireSync ready for usage you need some things. 
-- Internet connection - 
-it needed to install some tools and give some js code opportunity to work.
-- Java. Current version of FireSync uses JDK 18.
-- PostgreSQL. Since FS's DB powered by postgres you need it. 
-After the installation you have to create DB and user for FireSync. 
-Names "FireSync" for db and "fsync" for user recommended, but you can 
-create your own ones and then set it in settings; anyway, there you will
-set host, port and password.
-- If you want to use FireSync not only in LAN, then setup your DDNS.
 
+===
+
+## Build
+
+To build your FireSync you need some things to do. 
+
+#### a)
+Check your system for Java. Current version of FireSync uses JDK 18.
+
+#### b)
+Then you have to set up postgres. You can do it by local db way or by docker.
+Docker way will be overviewed. Firstly, you need to install Docker. Then do follow things:
+- if you don't have docker image of postgres, run `docker pull postgres`
+- create a docker container by `docker run -d -p <port for your choice>:5432 --name FireSyncPostgres -e POSTGRES_PASSWORD=<password> postgres`
+- connect to docker db: `psql -h localhost -p <your port> -U postgres -W` and enter your password. You can change the host, in case
+of some reasons
+- enter `CREATE DATABASE "FireSync" WITH OWNER = postgres;`. You can change the name
+- quite postgres connection by `\q` if you want to
+
+For non-docker way:
+- connect to your server
+- enter `CREATE DATABASE "FireSync" WITH OWNER = <owner>;`
+
+#### c)
+Please, install iftop tool for the network statistics collection. 
+
+#### d)
+This project uses Maven is a build tool, everything already done. Use `exec:java` to run FireSync.
+
+FireSync will set up all directories and tables in db. 
+
+You should place web-server directory in `~/FireSyncData/web_server/`, because there is no option for 
+such automatic process. Run with `--sinit` argument to continue with simplified initialization, if you 
+didn't place web server before the start.
+
+#### e)
+Set up ddns, if you want to make your FireSync public.
 
 ## Usage
 
@@ -143,7 +170,11 @@ It powered with PostgresSQL. DB contains next tables:
 ### FireSyncData directory
 This directory located in user's home catalog.
 - "buffer" contains zipped files of shares and json info about them.
-- "cfg" is the config dir (main.cfg, db.cfg).
+- "cfg" is the config dir (main.cfg, db.cfg, version.cfg).
 - "db" consists from data for right_menu and iftop data.
 - "scripts" - shell scripts
 - "web_server" contains webserver
+
+### Arguments
+- `--sinit` simplified initialization
+- `--nogui` no gui
