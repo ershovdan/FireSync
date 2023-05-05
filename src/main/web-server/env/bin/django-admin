@@ -1,4 +1,4 @@
-#!/Users/ershovdan/Programming/FireSync/src/web-server/env/bin/python3
+#!/Users/ershovdan/Programming/FireSync_dev/src/main/web-server/env/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -30,7 +30,7 @@ public class Timeout {
         GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
-        String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
+        String url = "jdbc:postgresql://" + DBdata.get("host") + ":" + DBdata.get("port") + "/" + DBdata.get("name");
         Properties props = new Properties();
         props.setProperty("user", DBdata.get("user"));
         props.setProperty("password", DBdata.get("password"));

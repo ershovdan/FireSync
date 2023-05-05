@@ -57,6 +57,7 @@ def list(request):
         db_cfg_json = json.loads(file.read())
 
     try:
+        print(db_cfg_json)
         conn = psycopg2.connect(database=db_cfg_json["name"],
                                 host=db_cfg_json["host"],
                                 user=db_cfg_json["user"],

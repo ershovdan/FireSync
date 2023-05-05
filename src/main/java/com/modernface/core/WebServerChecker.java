@@ -42,7 +42,7 @@ public class WebServerChecker {
         Runtime run = Runtime.getRuntime();
         Process pr = run.exec(cmd);
 
-        cmd = this.pathToData + "/web_server/env/bin/python " + this.pathToData + "/web_server/fs_web_server/manage.py runserver 0.0.0.0:" + getMainInfo.getCFG("web_server_port");
+        cmd = this.pathToData + "/web_server/env/bin/python3 " + this.pathToData + "/web_server/fs_web_server/manage.py runserver 0.0.0.0:" + getMainInfo.getCFG("web_server_port");
 
         run = Runtime.getRuntime();
         pr = run.exec(cmd);

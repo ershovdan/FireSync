@@ -1,6 +1,5 @@
 package com.modernface.core;
 
-import com.modernface.tools.GetDbInfo;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.json.simple.parser.ParseException;
@@ -11,8 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
 
 public class BufferChecker {
     Path pathToData;

@@ -19,17 +19,13 @@ Check your system for Java. Current version of FireSync uses JDK 18.
 
 #### b)
 Then you have to set up postgres. You can do it by local db way or by docker.
-Docker way will be overviewed. Firstly, you need to install Docker. Then do follow things:
-- if you don't have docker image of postgres, run `docker pull postgres`
-- create a docker container by `docker run -d -p <port for your choice>:5432 --name FireSyncPostgres -e POSTGRES_PASSWORD=<password> postgres`
-- connect to docker db: `psql -h localhost -p <your port> -U postgres -W` and enter your password. You can change the host, in case
-of some reasons
-- enter `CREATE DATABASE "FireSync" WITH OWNER = postgres;`. You can change the name
-- quite postgres connection by `\q` if you want to
+Docker way will be overviewed. Firstly, you need to install Docker. Then run `db-init.sh` script to 
+set up postgres on docker.
 
 For non-docker way:
 - connect to your server
 - enter `CREATE DATABASE "FireSync" WITH OWNER = <owner>;`
+- edit db settings
 
 #### c)
 Please, install iftop tool for the network statistics collection. 

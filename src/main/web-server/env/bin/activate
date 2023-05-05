@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/ershovdan/Programming/FireSync/src/web-server/env"
+VIRTUAL_ENV="/Users/ershovdan/Programming/FireSync_dev/src/main/web-server/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
