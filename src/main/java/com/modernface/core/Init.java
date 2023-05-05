@@ -32,17 +32,11 @@ public class Init {
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
         Connection conn;
-        try {
-            String url = "jdbc:postgresql://" + DBdata.get("host") + "/" + DBdata.get("name");
-            Properties props = new Properties();
-            props.setProperty("user", DBdata.get("user"));
-            props.setProperty("password", DBdata.get("password"));
-            conn = DriverManager.getConnection(url, props);
-        } catch (Exception exc) {
-            return;
-        }
-
-
+        String url = "jdbc:postgresql://" + DBdata.get("host") + ":" + DBdata.get("port") + "/" + DBdata.get("name");
+        Properties props = new Properties();
+        props.setProperty("user", DBdata.get("user"));
+        props.setProperty("password", DBdata.get("password"));
+        conn = DriverManager.getConnection(url, props);
 
         PreparedStatement st = conn.prepareStatement("" +
             "CREATE TABLE IF NOT EXISTS public.\"List\"\n" +
@@ -155,6 +149,7 @@ public class Init {
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage_final.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts", "network_usage.sh"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts", "db-init.sh"))));
 
         for (File file : files) {
             if (!file.exists()) {
@@ -164,13 +159,35 @@ public class Init {
 
         if (Files.readString(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg")).equals("")) {
             Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg"), "" +
-                "{\"name\": \"FireSync\", \"port\": \"5432\", \"user\": \"postgres\", \"password\": \"\", \"host\": \"localhost\"}" +
+                "{\"name\": \"postgres\", \"port\": \"5433\", \"user\": \"postgres\", \"password\": \"none\", \"host\": \"localhost\"}" +
             "");
         }
 
         if (Files.readString(Paths.get(String.valueOf(pathToData), "cfg", "main.cfg")).equals("")) {
             Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "main.cfg"), "" +
                 "{\"web_server_port\": \"8000\"}" +
+            "");
+        }
+
+        if (Files.readString(Paths.get(String.valueOf(pathToData), "scripts", "db-init.sh")).equals("")) {
+            Files.writeString(Paths.get(String.valueOf(pathToData), "scripts", "db-init.sh"), "" +
+                "port=$1\n" +
+                "password=$2\n" +
+                "\n" +
+                "\n" +
+                "# optional\n" +
+                "docker pull postgres\n" +
+                "\n" +
+                "docker run -d -p $port:5432 --name FireSyncPostgres -e POSTGRES_PASSWORD=$password postgres\n" +
+                "\n" +
+                "cd ~/\n" +
+                "mkdir \"FireSyncData\"\n" +
+                "cd FireSyncData\n" +
+                "mkdir \"cfg\"\n" +
+                "cd cfg\n" +
+                "touch db.cfg\n" +
+                "\n" +
+                "echo \"{\\\"name\\\": \\\"postgres\\\", \\\"port\\\": \\\"${port}\\\", \\\"user\\\": \\\"postgres\\\", \\\"password\\\": \\\"${password}\\\", \\\"host\\\": \\\"localhost\\\"}\" >> db.cfg" +
             "");
         }
 
@@ -181,6 +198,5 @@ public class Init {
         if (!(isSimplified) && createWebserver) {
             System.out.println("create ws");
         }
-
     }
 }
