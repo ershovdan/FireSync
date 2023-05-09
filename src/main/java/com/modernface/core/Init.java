@@ -1,18 +1,21 @@
 package com.modernface.core;
 
+import com.modernface.logger.Logger;
 import com.modernface.tools.Compress;
 import com.modernface.tools.GetDbInfo;
-import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
-import java.sql.*;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -27,16 +30,25 @@ public class Init {
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
     }
 
-    public void initDB() throws SQLException, IOException, ParseException {
+    public void initDB(Logger logger) throws SQLException, IOException, ParseException {
+        logger.info("DB init started");
+
         GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
-        Connection conn;
-        String url = "jdbc:postgresql://" + DBdata.get("host") + ":" + DBdata.get("port") + "/" + DBdata.get("name");
-        Properties props = new Properties();
-        props.setProperty("user", DBdata.get("user"));
-        props.setProperty("password", DBdata.get("password"));
-        conn = DriverManager.getConnection(url, props);
+        Connection conn = null;
+
+        try {
+            String url = "jdbc:postgresql://" + DBdata.get("host") + ":" + DBdata.get("port") + "/" + DBdata.get("name");
+            Properties props = new Properties();
+            props.setProperty("user", DBdata.get("user"));
+            props.setProperty("password", DBdata.get("password"));
+            conn = DriverManager.getConnection(url, props);
+        } catch (Exception exc) {
+            logger.error("can't connect to DB");
+            return;
+        }
+
 
         PreparedStatement st = conn.prepareStatement("" +
             "CREATE TABLE IF NOT EXISTS public.\"List\"\n" +
@@ -110,11 +122,19 @@ public class Init {
             st.close();
         } catch (Exception exc) {}
 
+        try {
+            st = conn.prepareStatement("INSERT INTO \"Other\" (type, value_int, value_str) VALUES ('net_interface', 0, 'eth0');");
+            st.execute();
+            st.close();
+        } catch (Exception exc) {}
+
         st = conn.prepareStatement("DELETE FROM \"Connected\" WHERE amount > -1;");
         st.execute();
         st.close();
 
         conn.close();
+
+        logger.info("DB init completed");
     }
 
     public void initDirs(boolean isSimplified) throws IOException {
@@ -125,6 +145,8 @@ public class Init {
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "logs"))));
+        dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "logs", "general"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "zip_progress"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "right_menu", "status"))));
         dirs.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts"))));
@@ -150,6 +172,7 @@ public class Init {
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "db", "network_usage_final.txt"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts", "network_usage.sh"))));
         files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "scripts", "db-init.sh"))));
+        files.add(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "logs", "fs.journal"))));
 
         for (File file : files) {
             if (!file.exists()) {
@@ -192,7 +215,7 @@ public class Init {
         }
 
         Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "version.cfg"), "" +
-            "{\"version\": \"1.1\"}" +
+            "{\"version\": \"1.0.3\"}" +
         "");
 
         if (!(isSimplified) && createWebserver) {

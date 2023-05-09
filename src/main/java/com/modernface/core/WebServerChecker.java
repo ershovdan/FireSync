@@ -2,6 +2,9 @@ package com.modernface.core;
 
 import com.modernface.logger.Logger;
 import com.modernface.tools.Compress;
+import com.modernface.tools.GetDbInfo;
+import com.modernface.tools.GetMainInfo;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +12,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.*;
-
-import com.modernface.tools.GetDbInfo;
-import com.modernface.tools.GetMainInfo;
-import org.json.simple.parser.ParseException;
+import java.util.HashMap;
+import java.util.Random;
 
 public class WebServerChecker {
     Path pathToData;
