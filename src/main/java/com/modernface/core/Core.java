@@ -1,35 +1,40 @@
 package com.modernface.core;
 
-import com.modernface.tools.Compress;
-import com.sun.jdi.connect.spi.Connection;
+import com.modernface.logger.Journal;
+import com.modernface.logger.Logger;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 
 public class Core {
     public static void main(String[] args) throws IOException, URISyntaxException, SQLException, InterruptedException, ParseException {
         Init init = new Init();
         init.initDirs(Arrays.asList(args).contains("--sinit"));
-        init.initDB();
 
-        if (args.length == 0) {
-            WebServerChecker ch = new WebServerChecker(null);
+        Logger logger = new Logger();
+
+        init.initDB(logger);
+
+        if ((args.length == 0) || Arrays.asList(args).contains("--sinit")) {
+            WebServerChecker ch = new WebServerChecker(null, logger);
             ch.startWebServer();
 
-            Timeout tm = new Timeout(800, 10000);
+            Timeout tm = new Timeout(800, 10000, logger);
             tm.start();
+            logger.info("high freq schedule started");
             tm.startLowFreq();
             tm.startLowFreqNetworkUsage();
+            logger.info("low freq schedule started");
+
+            if (Arrays.asList(args).contains("--sinit")) {
+                new Journal("simplified initialization");
+            } else {
+                new Journal("default");
+            }
         } else {
             if (Arrays.asList(args).contains("--nogui")) {
 

@@ -30,23 +30,6 @@ public class Compress {
         this.id = id;
     }
 
-    private void clearPreviousZipped(String operationName) {
-        ArrayList<File> files = (ArrayList<File>) FileUtils.listFilesAndDirs(new File(String.valueOf(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped"))), new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
-        String fileName;
-        for (File file : files) {
-            try {
-                fileName = file.getName().substring(16);
-                if (fileName.equals(operationName)) {
-                    FileUtils.deleteDirectory(file);
-                }
-                if (fileName.equals(operationName + ".json")) {
-                    FileUtils.delete(file);
-                }
-            } catch (StringIndexOutOfBoundsException ecx) {} catch (IOException e) {
-            }
-        }
-    }
-
     public void initJSON(String pathToJson) throws IOException {
         String json = "{\"all_files\": {}, \"zippedSize\": 0, \"unzippedSize\": 0, \"time\": 0}";
         Files.writeString(Path.of(pathToJson), json);

@@ -1,12 +1,10 @@
 import json
 import os
 import pathlib
-import random
-import string
-
 import psycopg2
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+
 
 module_dir = pathlib.Path(os.path.dirname(__file__))
 data_path = os.path.join(pathlib.Path.home(), 'FireSyncData')

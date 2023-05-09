@@ -174,25 +174,25 @@ public class Init {
                 "port=$1\n" +
                 "password=$2\n" +
                 "\n" +
-                "\n" +
                 "# optional\n" +
                 "docker pull postgres\n" +
                 "\n" +
                 "docker run -d -p $port:5432 --name FireSyncPostgres -e POSTGRES_PASSWORD=$password postgres\n" +
                 "\n" +
                 "cd ~/\n" +
-                "mkdir \"FireSyncData\"\n" +
+                "mkdir \"FireSyncData\" > /dev/null\n" +
                 "cd FireSyncData\n" +
-                "mkdir \"cfg\"\n" +
+                "mkdir \"cfg\" > /dev/null\n" +
                 "cd cfg\n" +
                 "touch db.cfg\n" +
                 "\n" +
-                "echo \"{\\\"name\\\": \\\"postgres\\\", \\\"port\\\": \\\"${port}\\\", \\\"user\\\": \\\"postgres\\\", \\\"password\\\": \\\"${password}\\\", \\\"host\\\": \\\"localhost\\\"}\" >> db.cfg" +
-            "");
+                "echo \"\" >> db.cfg\n" +
+                "echo \"{\\\"name\\\": \\\"postgres\\\", \\\"port\\\": \\\"${port}\\\", \\\"user\\\": \\\"postgres\\\", \\\"password\\\": \\\"${password}\\\", \\\"host\\\": \\\"localhost\\\"}\" >> db.cfg\n" +
+            "\n");
         }
 
         Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "version.cfg"), "" +
-            "{\"version\": \"1.0.2\"}" +
+            "{\"version\": \"1.1\"}" +
         "");
 
         if (!(isSimplified) && createWebserver) {

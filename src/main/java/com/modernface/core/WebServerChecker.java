@@ -1,5 +1,6 @@
 package com.modernface.core;
 
+import com.modernface.logger.Logger;
 import com.modernface.tools.Compress;
 
 import java.io.File;
@@ -17,10 +18,12 @@ import org.json.simple.parser.ParseException;
 public class WebServerChecker {
     Path pathToData;
     Connection conn;
+    Logger logger;
 
-    public WebServerChecker(Connection con) throws URISyntaxException, SQLException {
+    public WebServerChecker(Connection con, Logger logger) {
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
         this.conn = con;
+        this.logger = logger;
     }
 
     public void forRightMenu() throws IOException, SQLException, ParseException {
@@ -35,17 +38,23 @@ public class WebServerChecker {
         st.close();
     }
 
-    public void startWebServer() throws IOException, InterruptedException, ParseException {
+    public void startWebServer() throws IOException, ParseException {
         GetMainInfo getMainInfo = new GetMainInfo();
 
         String cmd = "lsof -t -i tcp:" + getMainInfo.getCFG("web_server_port") + "  | xargs kill -9";
         Runtime run = Runtime.getRuntime();
         Process pr = run.exec(cmd);
 
-        cmd = this.pathToData + "/web_server/env/bin/python3 " + this.pathToData + "/web_server/fs_web_server/manage.py runserver 0.0.0.0:" + getMainInfo.getCFG("web_server_port");
+        try {
+            cmd = this.pathToData + "/web_server/env/bin/python3 " + this.pathToData + "/web_server/fs_web_server/manage.py runserver 0.0.0.0:" + getMainInfo.getCFG("web_server_port");
 
-        run = Runtime.getRuntime();
-        pr = run.exec(cmd);
+            run = Runtime.getRuntime();
+            pr = run.exec(cmd);
+
+            this.logger.info("webserver started on port " + getMainInfo.getCFG("web_server_port"));
+        } catch (Exception exc) {
+            this.logger.error("webserver start was failed on port=" + getMainInfo.getCFG("web_server_port"));
+        }
     }
 
     public void checkList() throws SQLException, URISyntaxException, IOException, ParseException {
@@ -80,6 +89,8 @@ public class WebServerChecker {
             st = this.conn.createStatement();
             st.executeUpdate("UPDATE \"List\" SET \"status\" = 4 WHERE \"id\" = " + id + ";");
             st.close();
+
+            this.logger.info("new share was added, id=" + id);
         }
     }
 }

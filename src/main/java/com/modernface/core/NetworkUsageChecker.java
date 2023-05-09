@@ -1,24 +1,27 @@
 package com.modernface.core;
 
+import com.modernface.logger.Logger;
 import com.modernface.tools.GetMainInfo;
 import org.json.simple.parser.ParseException;
 
-import javax.sound.midi.Soundbank;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class NetworkUsageChecker {
     Path pathToData;
+    Connection conn;
+    Logger logger;
 
-    NetworkUsageChecker() {
+    NetworkUsageChecker(Connection con, Logger log) {
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
+        this.conn = con;
+        this.logger = log;
     }
 
     private int getInfoIndexes(String row) {
@@ -32,9 +35,8 @@ public class NetworkUsageChecker {
             return 0;
         }
 
-        
         int data = 0;
-        
+
         switch (row.substring(row.length() - 1)) {
             case "k" -> {
                 data = (int) Double.parseDouble(row.substring(0, row.length() - 1));
@@ -50,22 +52,46 @@ public class NetworkUsageChecker {
             }
         }
 
-        return (int) data;
+        return data;
     }
 
-    private void updateShellFile() throws IOException, ParseException {
+    private void updateShellFile() throws IOException, SQLException {
         GetMainInfo getMainInfo = new GetMainInfo();
 
-        String command = "iftop -i en0 -P -t -s10 -f \"src port " + getMainInfo.getCFG("web_server_port") + "\" 2> /dev/null| grep \"Total send rate:\" > " + Paths.get(this.pathToData.toString(), "db", "network_usage.txt");
+        Statement st = this.conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM \"Other\" WHERE type = 'net_interface';");
+
+        String netInterface = "";
+
+        while (rs.next()) {
+            netInterface = rs.getString("value_str");
+        }
+
+        String command = "";
+        try {
+            if (netInterface.equals("eth0")) {
+                command = "iftop -i eth0 -P -t -s10 -f \"src port " + getMainInfo.getCFG("web_server_port") + "\" 2> /dev/null| grep \"Total send rate:\" > " + Paths.get(this.pathToData.toString(), "db", "network_usage.txt");
+            } else {
+                if (netInterface.equals("en0")) {
+                    command = "iftop -i en0 -P -t -s10 -f \"src port " + getMainInfo.getCFG("web_server_port") + "\" 2> /dev/null| grep \"Total send rate:\" > " + Paths.get(this.pathToData.toString(), "db", "network_usage.txt");
+                }
+            }
+        } catch (Exception exc) {
+            this.logger.error("failed to update iftop file");
+        }
 
         Files.writeString(Paths.get(String.valueOf(Paths.get(this.pathToData.toString(), "scripts", "network_usage.sh"))), command);
     }
 
-    public void check() throws IOException, ParseException {
+    public void check() throws IOException, ParseException, SQLException {
         this.updateShellFile();
 
         ProcessBuilder pr = new ProcessBuilder("sh", Paths.get(this.pathToData.toString(), "scripts", "network_usage.sh").toString());
-        Process p = pr.start();
+        try {
+            Process p = pr.start();
+        } catch (Exception exc) {
+            this.logger.error("failed to execute iftop");
+        }
 
         String str = Files.readString(Paths.get(String.valueOf(this.pathToData), "db", "network_usage.txt"));
 

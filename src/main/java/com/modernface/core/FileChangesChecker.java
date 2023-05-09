@@ -1,10 +1,9 @@
 package com.modernface.core;
 
+import com.modernface.logger.Logger;
 import com.modernface.tools.Compress;
-import com.modernface.tools.GetDbInfo;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
@@ -18,16 +17,16 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Properties;
 
 public class FileChangesChecker {
     Path pathToData;
     Connection conn;
+    Logger logger;
 
-    FileChangesChecker(Connection con) throws URISyntaxException {
+    FileChangesChecker(Connection con, Logger log) {
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
         this.conn = con;
+        this.logger = log;
     }
 
     public void check() throws IOException, ParseException, SQLException, URISyntaxException {
@@ -133,9 +132,10 @@ public class FileChangesChecker {
 
                     Files.writeString(Paths.get(String.valueOf(this.pathToData), "buffer", "zipped", key + "op" + id + ".json"), finalJSON.toJSONString());
 
-
+                    this.logger.info("share with id=" + id + " was updated");
                 }
             }
+
             PreparedStatement stp = conn.prepareStatement("UPDATE \"Other\" SET value_str = '' WHERE type = 'now_operating_total';");
             stp.execute();
             stp.close();

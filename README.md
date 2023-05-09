@@ -19,7 +19,7 @@ Check your system for Java. Current version of FireSync uses JDK 18.
 
 #### b)
 Then you have to set up postgres. You can do it by local db way or by docker.
-Docker way will be overviewed. Firstly, you need to install Docker. Then run `db-init.sh` script to 
+Docker way will be overviewed. Firstly, you need to install Docker. Then run `db-init.sh <port> <password>` script to 
 set up postgres on docker.
 
 For non-docker way:
@@ -29,6 +29,9 @@ For non-docker way:
 
 #### c)
 Please, install iftop tool for the network statistics collection. 
+
+Make sure that you can run `iftop - i <en0 for macos or eth0 for lunix distributives>` without any 
+permission problem. If not try `chmod +s $(which iftop)`.
 
 #### d)
 This project uses Maven is a build tool, everything already done. Use `exec:java` to run FireSync.
@@ -99,7 +102,8 @@ and looks for file changes (every 10 sec). Timeout class calls other classes
 for their aims. 
 
 There are some checker classes that do separated tasks. Core is the main class.
-Init inits db, etc. Those classes use some tools located in "tools" package.
+Init inits db, etc. Those classes use some tools located in "tools" package. 
+Everything related to logging located in "logger" package.
 
 All statistic and data about shares put in db, except network usage due to
 the iftop features.
@@ -117,7 +121,7 @@ connect it with db.
 Finally, webserver exchanges data between gui and db.
 
 ### Data Base
-It powered with PostgresSQL. DB contains next tables:
+It powered with PostgreSQL. DB contains next tables:
 
 #### List
 - id
@@ -168,6 +172,7 @@ This directory located in user's home catalog.
 - "buffer" contains zipped files of shares and json info about them.
 - "cfg" is the config dir (main.cfg, db.cfg, version.cfg).
 - "db" consists from data for right_menu and iftop data.
+- "logs" there you can find general logs and journal
 - "scripts" - shell scripts
 - "web_server" contains webserver
 

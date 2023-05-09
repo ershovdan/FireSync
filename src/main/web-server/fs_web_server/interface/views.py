@@ -1,12 +1,8 @@
 import json
-
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-import pathlib
-import sqlite3
 import os
 import psycopg2
-import datetime
 import pathlib
 
 
@@ -14,7 +10,6 @@ module_dir = pathlib.Path(os.path.dirname(__file__))
 data_path = os.path.join(pathlib.Path.home(), 'FireSyncData')
 db_cfg_path = os.path.join(data_path, 'cfg', 'db.cfg')
 main_cfg_path = os.path.join(data_path, 'cfg', 'main.cfg')
-
 right_menu_path = os.path.join(module_dir.parent.parent.parent, 'db', 'right_menu')
 
 
@@ -387,15 +382,28 @@ def preferences(request):
 
     db_status = "true"
 
+    net_interface = ""
+
     try:
         conn = psycopg2.connect(database=db_cfg_json["name"],
                                 host=db_cfg_json["host"],
                                 user=db_cfg_json["user"],
                                 password=db_cfg_json["password"],
                                 port=db_cfg_json["port"])
+
+        cur = conn.cursor()
+
+        cur.execute('SELECT value_str FROM "Other" WHERE type = ' + "'net_interface'" + ';')
+
+        for i in cur.fetchall():
+            net_interface = i[0]
+
+        conn.commit()
         conn.close()
     except Exception:
         db_status = "false"
+
+    main_cfg_json["net_interface"] = net_interface
 
     context = {"db_data": db_cfg_json, "db_status": db_status, "main_data": main_cfg_json}
 
@@ -412,9 +420,24 @@ def preferences(request):
         if request.POST["db_password"] != db_cfg_json["password"]:
             changedDB["password"] = request.POST["db_password"]
 
+        print(main_cfg_json)
+
         changedMain = {}
-        if request.POST["webserver_port"] != db_cfg_json["web_server_port"]:
+        if request.POST["webserver_port"] != main_cfg_json["web_server_port"]:
             changedMain["web_server_port"] = request.POST["webserver_port"]
+        if request.POST["net_interface"] != main_cfg_json["net_interface"]:
+            conn = psycopg2.connect(database=db_cfg_json["name"],
+                                    host=db_cfg_json["host"],
+                                    user=db_cfg_json["user"],
+                                    password=db_cfg_json["password"],
+                                    port=db_cfg_json["port"])
+
+            cur = conn.cursor()
+
+            cur.execute('UPDATE "Other" SET value_str = ' + "'" + request.POST["net_interface"] + "'" + " WHERE type='net_interface';")
+
+            conn.commit()
+            conn.close()
 
         for i in changedDB.keys():
             db_cfg_json[i] = changedDB[i]

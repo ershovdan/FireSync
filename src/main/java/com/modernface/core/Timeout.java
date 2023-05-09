@@ -1,5 +1,6 @@
 package com.modernface.core;
 
+import com.modernface.logger.Logger;
 import com.modernface.tools.GetDbInfo;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,11 +23,13 @@ public class Timeout {
     int lowFreq;
     Path pathToData;
     Connection conn;
+    Logger logger;
 
-    public Timeout(int time, int lowFreq) throws SQLException, IOException, ParseException {
+    public Timeout(int time, int lowFreq , Logger log) throws SQLException, IOException, ParseException {
         this.time = time;
         this.lowFreq = lowFreq;
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
+        this.logger = log;
         GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(this.pathToData), "cfg", "db.cfg")));
         HashMap<String, String> DBdata = dbInfo.getCFG();
 
@@ -41,7 +44,7 @@ public class Timeout {
         Runnable task = new Runnable() {
             public void run() {
                 try {
-                    WebServerChecker webServerChecker = new WebServerChecker(conn);
+                    WebServerChecker webServerChecker = new WebServerChecker(conn, logger);
                     webServerChecker.checkList();
                     webServerChecker.forRightMenu();
                 } catch (Exception exc) {}
@@ -52,15 +55,12 @@ public class Timeout {
         executor.scheduleAtFixedRate(task, 0, this.time, TimeUnit.MILLISECONDS);
     }
 
-    public void startLowFreq() throws URISyntaxException, SQLException, IOException, ParseException {
+    public void startLowFreq() {
         Runnable task = new Runnable() {
             public void run() {
                 try {
                     UserStatsChecker userStatsChecker = new UserStatsChecker(conn);
                     userStatsChecker.amountOfConnected();
-
-                    NetworkUsageChecker networkUsageChecker = new NetworkUsageChecker();
-                    networkUsageChecker.check();
                 } catch (Exception exc) {}
             }
         };
@@ -69,7 +69,7 @@ public class Timeout {
         executor.scheduleAtFixedRate(task, 0, this.lowFreq, TimeUnit.MILLISECONDS);
     }
 
-    public void startLowFreqNetworkUsage() throws URISyntaxException, SQLException, IOException, ParseException {
+    public void startLowFreqNetworkUsage() {
         Runnable task = new Runnable() {
             private Path pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");;
 
@@ -78,10 +78,10 @@ public class Timeout {
                     GetDbInfo dbInfo = new GetDbInfo(String.valueOf(Paths.get(String.valueOf(pathToData), "cfg", "db.cfg")));
                     HashMap<String, String> DBdata = dbInfo.getCFG();
 
-                    FileChangesChecker fileChangesChecker = new FileChangesChecker(conn);
+                    FileChangesChecker fileChangesChecker = new FileChangesChecker(conn, logger);
                     fileChangesChecker.check();
 
-                    BufferChecker bufferChecker = new BufferChecker(conn);
+                    BufferChecker bufferChecker = new BufferChecker(conn, logger);
                     bufferChecker.check();
 
                     JSONParser parser = new JSONParser();
@@ -95,7 +95,7 @@ public class Timeout {
                     st.execute();
                     st.close();
 
-                    NetworkUsageChecker networkUsageChecker = new NetworkUsageChecker();
+                    NetworkUsageChecker networkUsageChecker = new NetworkUsageChecker(conn, logger);
                     networkUsageChecker.check();
                 } catch (Exception exc) {}
             }

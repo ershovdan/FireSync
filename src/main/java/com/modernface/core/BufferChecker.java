@@ -1,5 +1,6 @@
 package com.modernface.core;
 
+import com.modernface.logger.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.json.simple.parser.ParseException;
@@ -14,10 +15,12 @@ import java.util.ArrayList;
 public class BufferChecker {
     Path pathToData;
     Connection conn;
+    Logger logger;
 
-    BufferChecker(Connection con) {
+    BufferChecker(Connection con, Logger log) {
         this.pathToData = Paths.get(System.getProperty("user.home"), "FireSyncData");
         this.conn = con;
+        this.logger = log;
     }
 
     public void check() throws IOException, ParseException, SQLException {
@@ -34,7 +37,6 @@ public class BufferChecker {
                     id = id.substring(0, id.indexOf("."));
                 }
 
-
                 Statement st = this.conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM \"List\" WHERE id = " + id + ";");
 
@@ -50,6 +52,8 @@ public class BufferChecker {
                     } else {
                         FileUtils.delete(i);
                     }
+
+                    this.logger.info("share with id=" + id + " was removed");
                 }
 
                 rs.close();

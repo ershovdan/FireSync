@@ -17,6 +17,16 @@
                     {% csrf_token %}
                     <p style="grid-column-start: 1; grid-column-end: 4; grid-row-start: 1; grid-row-end: 1;">WEBSERVER PORT</p>
                     <input type="number" class="webserver_port" id="webserver_port" name="webserver_port" value="{{ main_data.web_server_port }}" style="grid-column-start: 1; grid-column-end: 3; grid-row-start: 2; grid-row-end: 2;" minlength="1">
+
+                    <p style="grid-column-start: 4; grid-column-end: 6; grid-row-start: 1; grid-row-end: 1;">NETWORK INTERFACE</p>
+                    <div style="display: flex; grid-column-start: 4; grid-column-end: 6; grid-row-start: 2; grid-row-end: 2;">
+                        <input type="radio" id="net_interface_eth0" name="net_interface" value="eth0" style="width: 20px; height: 20px; margin-top: .5em; margin-left: 10px; margin-right: 10px;;">
+                        <p style="margin-top: .3em;">Linux</p>
+                    </div>
+                    <div style="display: flex; grid-column-start: 5; grid-column-end: 7; grid-row-start: 2; grid-row-end: 2;">
+                        <input type="radio" id="net_interface_en0" name="net_interface" value="en0" style="width: 20px; height: 20px; margin-top: .5em; margin-left: 10px; margin-right: 10px;">
+                        <p style="margin-top: .3em;">MacOS</p>
+                    </div>
                 </form>
             </div>
             <div class="db_setting">
@@ -185,6 +195,14 @@
         direction: 'normal',
     })
 
+    let net_interface = "{{ main_data.net_interface }}"
+
+    if (net_interface == "eth0") {
+        document.getElementById("net_interface_eth0").checked = true;
+    } else {
+        document.getElementById("net_interface_en0").checked = true;
+    }
+
     {% include "blocks/right_menu_js_vars.js" %}
 
     function loop() {
@@ -206,7 +224,13 @@
             message.push("DB port")
         }
         if (document.getElementById("webserver_port").value !=  "{{ main_data.web_server_port }}") {
-            message.push("WEBSERVER address")
+            message.push("WEBSERVER port")
+        }
+        if (document.getElementById("net_interface_eth0").checked && net_interface != "eth0") {
+            message.push("network interface")
+        }
+        if (document.getElementById("net_interface_en0").checked && net_interface != "en0") {
+            message.push("network interface")
         }
 
         let final_message = "You're going to change: "

@@ -1,7 +1,6 @@
 package com.modernface.core;
 
 import com.modernface.tools.Compress;
-import com.modernface.tools.GetDbInfo;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -9,9 +8,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
 
 public class UserStatsChecker {
     Path pathBaseParent;
