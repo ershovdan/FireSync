@@ -29,7 +29,7 @@ def getJsonFile(request):
     except Exception:
         return JsonResponse({"answer": "false"})
 
-    cur.execute('SELECT * FROM "List" WHERE id = ' + id + "AND key = '" + key + "';")
+    cur.execute('SELECT * FROM "List" WHERE id = ' + id + " AND key = '" + key + "';")
 
     length = 0
     for i in cur.fetchall():
@@ -63,7 +63,7 @@ def getFile(request):
     except Exception:
         return JsonResponse({"answer": "false"})
 
-    cur.execute('SELECT * FROM "List" WHERE id = ' + id + "AND key = '" + key + "';")
+    cur.execute('SELECT * FROM "List" WHERE id = ' + id + " AND key = '" + key + "';")
 
     length = 0
     for i in cur.fetchall():
