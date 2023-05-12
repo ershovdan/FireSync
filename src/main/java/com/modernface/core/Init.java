@@ -215,7 +215,7 @@ public class Init {
         }
 
         Files.writeString(Paths.get(String.valueOf(pathToData), "cfg", "version.cfg"), "" +
-            "{\"version\": \"1.0.3\"}" +
+            "{\"version\": \"1.1.1\"}" +
         "");
 
         if (!(isSimplified) && createWebserver) {
